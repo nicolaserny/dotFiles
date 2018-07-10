@@ -1,2 +1,4 @@
-# configs
-My config files
+# My config files
+
+- .bashrc
+- brew.list: list of brew packages
