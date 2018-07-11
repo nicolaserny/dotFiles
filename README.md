@@ -2,3 +2,4 @@
 
 - .bashrc
 - brew.list: list of brew packages
+- init.vim

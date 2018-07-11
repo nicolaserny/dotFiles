@@ -24,6 +24,7 @@ pango
 pipenv
 swiftformat
 telnet
+the_silver_searcher
 vim
 watchman
 yarn

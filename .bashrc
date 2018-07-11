@@ -1,3 +1,6 @@
+# bash in vi mode
+set -o vi
+
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 # fzf configuration
 export FZF_DEFAULT_COMMAND='fd --type f'
