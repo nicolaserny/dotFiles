@@ -150,12 +150,12 @@ let g:polyglot_disabled = ['typescript']
 " fzf
 let g:fzf_buffers_jump = 1
 let g:fzf_command_prefix = 'Fzf'
+command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, {'options': '--delimiter : --nth 4..'}, <bang>0)
 nnoremap <leader>fb :FzfBuffers<cr>
 nnoremap <leader>fh :FzfHistory<cr>
 nnoremap <leader>ff :FzfFiles<cr>
 nnoremap <leader>fg :FzfGFiles<cr>
-nnoremap <leader>fa :FzfAg<cr>
-
+nnoremap <leader>fa :Ag<cr>
 " remap
 nmap <C-T> <C-]>
 
