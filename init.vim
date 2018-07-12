@@ -36,14 +36,12 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
     \ }
-Plug 'prettier/vim-prettier', {
-  \ 'do': 'yarn install',
-  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue'] }
 
 Plug 'othree/html5.vim'
 Plug 'sheerun/vim-polyglot'
 
 Plug 'vim-airline/vim-airline'
+Plug 'townk/vim-autoclose'
 call plug#end()
 
 " basics
@@ -68,6 +66,8 @@ set wildmenu            " display completion matches in a status line
 set ttimeout            " time out for key codes
 set ttimeoutlen=100     " wait up to 100ms after Esc for special key
 set scrolloff=5
+set autoread
+set autowrite
 if has('mouse')
   set mouse=a
 endif
@@ -110,6 +110,7 @@ let g:LanguageClient_diagnosticsList = 'location'
 augroup LanguageClientConfig
   autocmd!
 
+  autocmd FileType javascript,typescript,json,css,less,html,reason nnoremap <buffer> <F5> :call LanguageClient_contextMenu()<cr>
   " <leader>ld to go to definition
   autocmd FileType javascript,typescript,json,css,less,html,reason nnoremap <buffer> <leader>ld :call LanguageClient_textDocument_definition()<cr>
   " <leader>lf to autoformat document
@@ -154,9 +155,46 @@ nnoremap <leader>ff :FzfFiles<cr>
 nnoremap <leader>fg :FzfGFiles<cr>
 nnoremap <leader>fa :FzfAg<cr>
 
-" prettier
-let g:prettier#autoformat = 0
-autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue PrettierAsync
-let g:prettier#config#print_width = 120
-let g:prettier#config#tab_width = 0
-let g:prettier#config#single_quote = 'true'
+" remap
+nmap <C-T> <C-]>
+
+
+function! s:FindFolder(folder)
+    let current_dir = expand("%:p:h") 
+
+    let i = 0
+    while i <= 10
+        " echo "Looking for folder " . a:folder . " at " . current_dir
+        let found = globpath(current_dir, a:folder, 0, 1)
+
+        if len(found) > 0
+            " echom "Found folder " . found[0]
+            let l:folder = found[0]
+            python3 << EOF
+import os
+import vim
+vim.command('let l:folder = \'' + os.path.abspath(vim.eval('l:folder')) + '\'')
+EOF
+            return l:folder
+        endif
+
+        let i = i + 1
+        let current_dir = current_dir . '/..'
+    endwhile
+endfunction
+
+function! SetupPrettier()
+    let l:config_path = s:FindFolder(".prettierrc")
+    let l:config_switch = '--config ' . config_path
+
+    if strlen(config_path) == 0
+        let l:config_switch = ''
+    endif
+
+    nnoremap gp :silent %!prettier --stdin  l:config_switch --stdin-filepath %<CR>
+endfunction
+
+augroup personal
+    autocmd!
+    autocmd BufRead,BufNewFile *.ts,*.tsx,*.js,*.jsx  call SetupPrettier()
+augroup END " }}}

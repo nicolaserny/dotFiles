@@ -24,3 +24,6 @@ export PS1="\u@\h \W\[\033[32m\]\$(parse_git_branch)\[\033[00m\] $ "
 alias gitg='git log --graph --decorate --oneline --all'
 alias gitp="git push origin $(parse_git_branch_for_push)"
 alias gitpf="git push -f origin $(parse_git_branch_for_push)"
+
+# vim aliases
+alias nvimu='vim +PlugInstall +UpdateRemotePlugins +PlugUpgrade +PlugUpdate +qa!'
