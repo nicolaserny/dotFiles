@@ -46,6 +46,7 @@ call plug#end()
 
 " basics
 filetype plugin indent on
+set relativenumber
 set number
 set incsearch
 set ignorecase
