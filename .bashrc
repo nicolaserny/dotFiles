@@ -26,4 +26,4 @@ alias gitp="git push origin $(parse_git_branch_for_push)"
 alias gitpf="git push -f origin $(parse_git_branch_for_push)"
 
 # vim aliases
-alias nvimu='vim +PlugInstall +UpdateRemotePlugins +PlugUpgrade +PlugUpdate +qa!'
+alias nvimu='nvim +PlugUpgrade +PlugUpdate +qa!'

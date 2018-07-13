@@ -40,8 +40,8 @@ Plug 'autozimu/LanguageClient-neovim', {
 Plug 'othree/html5.vim'
 Plug 'sheerun/vim-polyglot'
 
-Plug 'vim-airline/vim-airline'
-Plug 'townk/vim-autoclose'
+Plug 'itchyny/lightline.vim'
+Plug 'jiangmiao/auto-pairs'
 call plug#end()
 
 " basics
@@ -191,10 +191,16 @@ function! SetupPrettier()
         let l:config_switch = ''
     endif
 
-    nnoremap gp :silent %!prettier --stdin  l:config_switch --stdin-filepath %<CR>
+    function! CallPrettier()
+        mark m
+        silent %!prettier --stdin  l:config_switch --stdin-filepath %
+        normal! `m
+    endfunction
+    nnoremap gp :call CallPrettier()<CR>
+    let &l:formatprg='prettier --stdin ' . l:config_switch . ' --stdin-filepath ' . expand('%')
 endfunction
 
 augroup personal
     autocmd!
-    autocmd BufRead,BufNewFile *.ts,*.tsx,*.js,*.jsx  call SetupPrettier()
+    autocmd BufRead,BufNewFile *.ts,*.tsx,*.js,*.jsx,*.json,*.css  call SetupPrettier()
 augroup END " }}}
