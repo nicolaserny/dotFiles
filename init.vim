@@ -42,6 +42,7 @@ Plug 'sheerun/vim-polyglot'
 
 Plug 'itchyny/lightline.vim'
 Plug 'jiangmiao/auto-pairs'
+Plug 'tpope/vim-surround'
 call plug#end()
 
 " basics
@@ -205,3 +206,7 @@ augroup personal
     autocmd!
     autocmd BufRead,BufNewFile *.ts,*.tsx,*.js,*.jsx,*.json,*.css  call SetupPrettier()
 augroup END " }}}
+
+" misc
+command! Vimrc edit ~/Developer/my-configs/init.vim
+
