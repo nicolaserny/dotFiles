@@ -209,4 +209,11 @@ augroup END " }}}
 
 " misc
 command! Vimrc edit ~/Developer/my-configs/init.vim
+nmap Y y$
 
+" react
+nmap <leader>ri iimport * as React from 'react';<CR><ESC>
+nmap <leader>rr iimport { connect } from 'react-redux';<CR><ESC>
+map <leader>bn :bn<cr>
+map <leader>bp :bp<cr>
+map <leader>bd :bd<cr>
