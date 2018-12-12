@@ -1,6 +1,10 @@
 # bash in vi mode
 set -o vi
 
+[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
+
+unset _fzf_completion_loaded
+source ~/Developer/my-configs/git-completion.bash
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 # fzf configuration
 export FZF_DEFAULT_COMMAND='fd --type f'
