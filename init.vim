@@ -1,9 +1,8 @@
- "Get the defaults that most users want.
 set nocompatible
 
 let g:mapleader = "\<Space>"
 
-" Plugins
+" Plugins {{{
 let vimplug_exists=expand('~/.config/nvim/autoload/plug.vim')
 
 if !filereadable(vimplug_exists)
@@ -18,40 +17,49 @@ endif
 call plug#begin('~/.config/nvim/bundle')
 Plug 'dracula/vim', { 'as': 'dracula' }
 
-" fzf
+" fzf {{{
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
+" }}}
 
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'scrooloose/nerdtree'
-Plug 'scrooloose/nerdcommenter'
 
+" Launguage support {{{
 " JS TS TSX JSX {{{
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
 Plug 'ianks/vim-tsx'
 Plug 'leafgarland/typescript-vim'
 Plug 'HerringtonDarkholme/yats.vim'
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
+" }}}
 
+" C# {{{
+Plug 'maurelio1234/vim-csharp'
+Plug 'sillyotter/t4-vim'
+" }}}
+
+" Misc {{{
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'jiangmiao/auto-pairs'
 Plug 'othree/html5.vim'
 Plug 'sheerun/vim-polyglot'
-
-Plug 'itchyny/lightline.vim'
-Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-surround'
-call plug#end()
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-fugitive'
+Plug 'Nicoloren/vim-french-thesaurus'
 
-" basics
+call plug#end()
+" }}}
+
+" basics {{{
+set shortmess=ac
+set preserveindent
 filetype plugin indent on
 set relativenumber
 set number
 set incsearch
-set ignorecase
-set smartcase
+set noignorecase smartcase
 set nohlsearch
 set tabstop=4
 set softtabstop=0
@@ -65,6 +73,7 @@ set history=200
 set backspace=indent,eol,start
 set showcmd             " display incomplete commands
 set wildmenu            " display completion matches in a status line
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite,*/bin/**,*/obj/**
 set ttimeout            " time out for key codes
 set ttimeoutlen=100     " wait up to 100ms after Esc for special key
 set scrolloff=5
@@ -74,91 +83,65 @@ if has('mouse')
   set mouse=a
 endif
 set hidden
-
-
-" preferences
+set bg=dark
 set pastetoggle=<F2>
 set belloff=all
+" }}}
 
-" Encoding
+" Encoding {{{
 set encoding=utf-8
 set fileencoding=utf-8
 set fileencodings=utf-8
+" }}}
 
-" Turn-on dracula color scheme
+" Turn-on dracula color scheme {{{
 syntax on
 color dracula
+" }}}
 
-" NERDTree
-" How can I close vim if the only window left open is a NERDTree?
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-" toggle NERDTree
-map <leader>nt :NERDTreeToggle<CR>
-map <leader>nf :NERDTreeFind<CR>
-let g:NERDTreeChDirMode=2
-let g:NERDTreeIgnore=['\.rbc$', '\~$', '\.pyc$', '\.db$', '\.sqlite$', '__pycache__', 'node_modules']
-let g:NERDTreeSortOrder=['^__\.py$', '\/$', '*', '\.swp$', '\.bak$', '\~$']
-let g:NERDTreeShowBookmarks=1
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite
-
-" Deoplene
+" Deoplene {{{
 let g:deoplete#enable_at_startup = 1
+" }}}
 
-" typescript
-"" Automatically start language servers.
-let g:LanguageClient_autoStart = 1
-" Use location list instead of quickfix
-let g:LanguageClient_diagnosticsList = 'location'
-
-augroup LanguageClientConfig
-  autocmd!
-
-  autocmd FileType javascript,typescript,javascriptreact,typescriptreact,json,css,less,html,reason nnoremap <buffer> <F5> :call LanguageClient_contextMenu()<cr>
-  " <leader>ld to go to definition
-  autocmd FileType javascript,typescript,javascriptreact,typescriptreact,json,css,less,html,reason nnoremap <buffer> <leader>ld :call LanguageClient_textDocument_definition()<cr>
-  " <leader>lf to autoformat document
-  autocmd FileType javascript,typescript,javascriptreact,typescriptreact,json,css,less,html,reason nnoremap <buffer> <leader>lf :call LanguageClient_textDocument_formatting()<cr>
-  " <leader>lh for type info under cursor
-  autocmd FileType javascript,typescript,javascriptreact,typescriptreact,json,css,less,html,reason nnoremap <buffer> <leader>lh :call LanguageClient_textDocument_hover()<cr>
-  " <leader>lr to rename variable under cursor
-  autocmd FileType javascript,typescript,javascriptreact,typescriptreact,json,css,less,html,reason nnoremap <buffer> <leader>lr :call LanguageClient_textDocument_rename()<cr>
-  " <leader>lc to switch omnifunc to LanguageClient
-  autocmd FileType javascript,typescript,javascriptreact,typescriptreact,json,css,less,html,reason nnoremap <buffer> <leader>lc :setlocal omnifunc=LanguageClient#complete<cr>
-  " <leader>ls to fuzzy find the symbols in the current document
-  autocmd FileType javascript,typescript,javascriptreact,typescriptreact,json,css,less,html,reason nnoremap <buffer> <leader>ls :call LanguageClient_textDocument_documentSymbol()<cr>
-
-  " Use as omnifunc by default
-  autocmd FileType javascript,typescript,javascriptreact,typescriptreact,json,css,less,html,reason setlocal omnifunc=LanguageClient#complete
-augroup END
-
-let g:LanguageClient_serverCommands = {
-    \ 'javascript': ['javascript-typescript-stdio'],
-    \ 'javascriptreact': ['javascript-typescript-stdio'],
-    \ 'typescript': ['javascript-typescript-stdio'],
-    \ 'typescriptreact': ['javascript-typescript-stdio'],
-    \ 'html': ['html-languageserver', '--stdio'],
-    \ 'css': ['css-languageserver', '--stdio'],
-    \ 'less': ['css-languageserver', '--stdio'],
-    \ 'json': ['json-languageserver', '--stdio']
-    \ }
-
-" Airline
-let g:airline#extensions#tabline#enabled = 1
+" Airline {{{
+let airline#extensions#tabline#tabs_label = ''
+let airline#extensions#tabline#show_splits = 0
+let g:airline_solarized_bg='dark'
+let g:airline#extensions#syntastic#enabled = 1
+let g:airline_powerline_fonts = 1
+set laststatus=2
+set showtabline=0
+" }}}
 
 " vim-polyglot {{{
 let g:polyglot_disabled = ['typescript']
+" }}}
 
-" fzf
+" cd - changedir {{{
+nnoremap <leader>cdK :cd ~/Developer/koordinator<CR>
+" }}}
+
+" ag {{{
+if executable("ag")
+   set grepprg=ag\ --nogroup\ --nocolor\ --ignore-case\ --column\ --ignore\ node_modules\ --ignore\ dist
+   set grepformat=%f:%l:%c:%m,%f:%l:%m
+endif
+"}}}
+
+" fzf{{{
 let g:fzf_buffers_jump = 1
 let g:fzf_command_prefix = 'Fzf'
 command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, {'options': '--delimiter : --nth 4..'}, <bang>0)
 nnoremap <leader>fb :FzfBuffers<cr>
 nnoremap <leader>fh :FzfHistory<cr>
 nnoremap <leader>ff :FzfFiles<cr>
-nnoremap <leader>fg :FzfGFiles<cr>
 nnoremap <leader>fa :Ag<cr>
-" remap
+nnoremap <leader>fw :execute "FzfAg " . expand("<cword>")<cr>
+"}}}
+
+" remap help navigation {{{
 nmap <C-T> <C-]>
+" }}}
 
 
 function! s:FindFolder(folder)
@@ -207,13 +190,40 @@ augroup personal
     autocmd BufRead,BufNewFile *.ts,*.tsx,*.js,*.jsx,*.json,*.css  call SetupPrettier()
 augroup END " }}}
 
-" misc
+" misc {{{
 command! Vimrc edit ~/Developer/my-configs/init.vim
 nmap Y y$
+inoremap jj <Esc>
+"}}}
 
-" react
+" react snippets {{{
 nmap <leader>ri iimport * as React from 'react';<CR><ESC>
 nmap <leader>rr iimport { connect } from 'react-redux';<CR><ESC>
+" }}}
+
+" map buffer {{{
 map <leader>bn :bn<cr>
 map <leader>bp :bp<cr>
 map <leader>bd :bd<cr>
+" }}}
+
+" terminal mode {{{
+tnoremap <C-c><C-c> <C-\><C-n>
+tnoremap <C-h> <C-\><C-N><C-w>h
+tnoremap <C-j> <C-\><C-N><C-w>j
+tnoremap <C-k> <C-\><C-N><C-w>k
+tnoremap <C-l> <C-\><C-N><C-w>l
+inoremap <C-h> <C-\><C-N><C-w>h
+inoremap <C-j> <C-\><C-N><C-w>j
+inoremap <C-k> <C-\><C-N><C-w>k
+inoremap <C-l> <C-\><C-N><C-w>l
+" }}}
+
+" split naCavigation {{{
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+" }}}
+
+set splitright
