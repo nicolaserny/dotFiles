@@ -191,6 +191,8 @@ augroup personal
     " Filetype detection {{{
     autocmd BufRead,BufNewFile *.template set filetype=sh
     autocmd BufRead,BufNewFile *.xaml,*.cxml,*.xcml,App.config,NLog.config set filetype=xml
+    autocmd BufRead,BufNewFile *.js,*.jsx set filetype=javascript
+    autocmd BufRead,BufNewFile *.ts,*.tsx set filetype=typescript
     " }}}
 
     " Filetype specific settings {{{
@@ -201,8 +203,8 @@ augroup personal
     autocmd FileType python setlocal textwidth=0
     " }}}
     
-    autocmd FileType javascript,javascript.jsx inoremap <silent><expr> <c-n> coc#refresh()
-    autocmd FileType typescript,typescript.tsx inoremap <silent><expr> <c-n> coc#refresh()
+    autocmd FileType javascript inoremap <silent><expr> <c-n> coc#refresh()
+    autocmd FileType typescript inoremap <silent><expr> <c-n> coc#refresh()
 augroup END " }}}
 " }}}
 " cic-vim {{{
@@ -283,8 +285,6 @@ augroup END
 
 "{{{
     let g:deoplete#enable_at_startup = 0
-    autocmd FileType typescript.tsx
-       \ call deoplete#custom#buffer_option('auto_complete', v:false)
 
     let g:deoplete#sources = {}
     let g:deoplete#sources._=['buffer', 'ultisnips', 'file', 'dictionary']
