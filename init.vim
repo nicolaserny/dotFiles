@@ -33,11 +33,6 @@ Plug 'leafgarland/typescript-vim'
 Plug 'HerringtonDarkholme/yats.vim'
 " }}}
 
-" csharp {{{
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'OmniSharp/omnisharp-vim'
-" }}}
-
 " C# {{{
 Plug 'maurelio1234/vim-csharp'
 Plug 'sillyotter/t4-vim'
@@ -139,6 +134,7 @@ command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, {'options': '--delimiter : 
 nnoremap <leader>fb :FzfBuffers<cr>
 nnoremap <leader>fh :FzfHistory<cr>
 nnoremap <leader>ff :FzfFiles<cr>
+nnoremap <leader>fg :FzfGFiles<cr>
 nnoremap <leader>fa :Ag<cr>
 nnoremap <leader>fw :execute "FzfAg " . expand("<cword>")<cr>
 "}}}
@@ -223,12 +219,20 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
+" Use K for show documentation in preview window
+nnoremap <silent> gh :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if &filetype == 'vim'
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
-
-" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-vmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
 
 " Remap for do codeAction of current line
 nmap <leader>ac  <Plug>(coc-codeaction)
@@ -280,25 +284,3 @@ augroup omnisharp_commands
 augroup END
 " }}}
 
-
-"{{{
-    let g:deoplete#enable_at_startup = 0
-    autocmd FileType typescript.tsx
-       \ call deoplete#custom#buffer_option('auto_complete', v:false)
-
-    let g:deoplete#sources = {}
-    let g:deoplete#sources._=['buffer', 'ultisnips', 'file', 'dictionary']
-    let g:deoplete#sources.cs = ['omni', 'file', 'buffer', 'ultisnips']
-
-    let g:deoplete#omni#input_patterns = {}
-    let g:deoplete#omni#input_patterns.cs = ['\w*']
-
-    let g:deoplete#keyword_patterns = {}
-
-    " Use smartcase.
-    let g:deoplete#enable_smart_case = 1
-
-    " <C-h>, <BS>: close popup and delete backword char.
-    inoremap <expr><C-h> deoplete#smart_close_popup()."\<C-h>"
-    inoremap <expr><BS>  deoplete#smart_close_popup()."\<C-h>"
-"}}}k
