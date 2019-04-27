@@ -1,8 +1,0 @@
-// Place your key bindings in this file to overwrite the defaults
-[
-    {
-        "key": "shift+alt+l",
-        "command": "-extension.refactorix.ExtractVariable",
-        "when": "editorTextFocus"
-    }
-]

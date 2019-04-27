@@ -108,6 +108,8 @@ let airline#extensions#tabline#show_splits = 0
 let g:airline_solarized_bg='dark'
 let g:airline#extensions#syntastic#enabled = 1
 let g:airline_powerline_fonts = 1
+let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
+let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
 set laststatus=2
 set showtabline=0
 " }}}
@@ -118,6 +120,7 @@ let g:polyglot_disabled = ['typescript']
 
 " cd - changedir {{{
 nnoremap <leader>cdK :cd ~/Developer/koordinator<CR>
+nnoremap <leader>cdW :cd ~/Developer/koordinator/webapp<CR>
 " }}}
 
 " ag {{{
@@ -130,17 +133,20 @@ endif
 " fzf{{{
 let g:fzf_buffers_jump = 1
 let g:fzf_command_prefix = 'Fzf'
+let g:fzf_tags_command = 'ctags -R'
 command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, {'options': '--delimiter : --nth 4..'}, <bang>0)
 nnoremap <leader>fb :FzfBuffers<cr>
 nnoremap <leader>fh :FzfHistory<cr>
 nnoremap <leader>ff :FzfFiles<cr>
 nnoremap <leader>fg :FzfGFiles<cr>
+nnoremap <leader>ft :FzfTags<cr>
 nnoremap <leader>fa :Ag<cr>
 nnoremap <leader>fw :execute "FzfAg " . expand("<cword>")<cr>
 "}}}
 
 " remap help navigation {{{
-nmap <C-T> <C-]>
+nmap <C-)> <C-]>
+inoremap <C-x><C-)> <C-x><C-]>
 " }}}
 
 " misc {{{
@@ -196,9 +202,8 @@ augroup personal
     autocmd FileType xml setlocal textwidth=0
     autocmd FileType python setlocal textwidth=0
     " }}}
-    
-    autocmd FileType javascript,javascript.jsx inoremap <silent><expr> <c-n> coc#refresh()
-    autocmd FileType typescript,typescript.tsx inoremap <silent><expr> <c-n> coc#refresh()
+
+    autocmd FileType cs nnoremap <buffer> K :call GoogleSearch("csharp+" . expand("<cword>"))<cr>
 augroup END " }}}
 " }}}
 " cic-vim {{{
@@ -207,6 +212,7 @@ augroup END " }}}
 
 " Use <cr> for confirm completion, `<C-g>u` means break undo chain at current position.
 " Coc only does snippet and additional edit on confirm.
+inoremap <silent><expr> <C-Space> coc#refresh()
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " Use `[c` and `]c` for navigate diagnostics
@@ -265,22 +271,34 @@ nnoremap <silent> <leader>cp  :<C-u>CocListResume<CR>
 command! -nargs=0 Prettier :call CocAction('runCommand', 'prettier.formatFile')
 nmap <silent> gp :Prettier<CR>
 
-" OmniSharp {{{
-let g:OmniSharp_server_use_mono = 1
-let g:OmniSharp_selector_ui = 'fzf'
 set completeopt=longest,menuone,preview
-let g:OmniSharp_timeout = 5
 set previewheight=5
-let g:OmniSharp_highlight_types = 1
-inoremap <C-Space> <C-x><C-o>
-augroup omnisharp_commands
-    autocmd!
-    autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
-    autocmd InsertLeave *.cs call OmniSharp#HighlightBuffer()
-    autocmd FileType cs nnoremap <buffer> gd :OmniSharpGotoDefinition<CR>
-    autocmd FileType cs nnoremap <buffer> <Leader>fi :OmniSharpFindImplementations<CR>
-    autocmd FileType cs nnoremap <buffer> <Leader>fs :OmniSharpFindSymbol<CR>
-    autocmd FileType cs nnoremap <buffer> <Leader>fu :OmniSharpFindUsages<CR>
-augroup END
-" }}}
 
+
+function! GenerateTags()
+    function! DeleteTagBuffers()
+        silent! execute "bdelete! " . t:ctags_buffer
+    endfunction
+
+    split
+    " universal ctags - https://ctags.io/
+    execute "terminal bash -c \"ctags -R --sort=yes --exclude='*.css' --exclude='packages' --exclude='*.min.js' --exclude=generated --exclude=StateMachine --exclude=Common --exclude='*.json' --exclude='*.html' --exclude=semantic --exclude=node_modules --exclude=build --exclude=dist --exclude=lib --exclude=dist --exclude=.git . --verbose\"" 
+    file Ctags
+    setlocal nobuflisted bufhidden=delete nomodifiable
+    let t:ctags_buffer = bufnr("%")
+    normal! G
+    nmap <buffer> D :call DeleteTagBuffers()<CR>
+
+endfunction
+
+command! GenerateTags silent call GenerateTags()
+
+
+let g:netrw_banner=0
+let g:netrw_liststyle=3
+let g:netrw_list_hide = '\(^\|\s\s\)\zs\.\S\+,\(^\|\s\s\)ntuser\.\S\+'
+
+function! GoogleSearch(query)
+    let s:url = "https://www.google.com/search?q=" . a:query
+    silent exec "!open '".s:url."'"
+endfunction
