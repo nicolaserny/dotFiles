@@ -29,17 +29,19 @@ Plug 'kyazdani42/nvim-tree.lua'
 Plug 'onsails/lspkind-nvim'
 Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'L3MON4D3/LuaSnip'
+Plug 'lukas-reineke/indent-blankline.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
 Plug 'haishanh/night-owl.vim'
 Plug 'github/copilot.vim'
 Plug 'akinsho/toggleterm.nvim'
 
+Plug 'lewis6991/gitsigns.nvim'
+
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-fugitive'
-Plug 'Nicoloren/vim-french-thesaurus'
 
 call plug#end()
 " }}}
@@ -71,6 +73,7 @@ set ttimeoutlen=100     " wait up to 100ms after Esc for special key
 set scrolloff=5
 set autoread
 set autowrite
+set signcolumn=yes
 if has('mouse')
     set mouse=a
 endif
@@ -139,6 +142,12 @@ require'nvim-treesitter.configs'.setup {
         "scss",
         "css",
         "markdown",
+        "lua",
+        "vim",
+        "dockerfile",
+        "dot",
+        "scss",
+        "bash",
         },
     autotag = {
         enable = true,
@@ -155,7 +164,7 @@ pickers = {
         },
     find_files = {
         find_command = { "rg", "--ignore-file", ".gitignore", "--hidden", "--files"},
-        prompt_prefix = "🔍"
+        prompt_prefix = "🔍 "
         },
     },
 }
@@ -189,6 +198,7 @@ local on_attach = function(client, bufnr)
     buf_set_keymap('n', '<leader>f', '<Cmd>lua vim.lsp.buf.formatting()<CR>', opts)
     buf_set_keymap('n', '<leader>(', '<Cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
     buf_set_keymap('n', '<leader>)', '<Cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+    buf_set_keymap('n', '<leader>e', '<Cmd>lua vim.diagnostic.open_float()<CR>', opts)
     --...
 end
 
@@ -346,8 +356,16 @@ function _G.set_terminal_keymaps()
   vim.api.nvim_buf_set_keymap(0, 't', '<C-l>', [[<C-\><C-n><C-W>l]], opts)
 end
 
--- if you only want these mappings for toggle term use term://*toggleterm#* instead
 vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
+
+require("indent_blankline").setup {
+}
+
+require('telescope').load_extension('fzf')
+
+require('gitsigns').setup({
+  current_line_blame = true,
+})
 
 EOF
 
