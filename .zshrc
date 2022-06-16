@@ -1,5 +1,8 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
+source "/Users/nicolaserny/.oh-my-zsh/custom/themes/spaceship.zsh-theme"
+
+export ZSH_DISABLE_COMPFIX=true
 
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/nicolaserny/.oh-my-zsh"
@@ -8,7 +11,7 @@ export ZSH="/Users/nicolaserny/.oh-my-zsh"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="robbyrussell"
+ZSH_THEME="spaceship"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -68,7 +71,7 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git node osx python docker docker-compose kubectl terraform npm zsh-syntax-highlighting zsh-nvm)
+plugins=(git node macos python docker docker-compose kubectl terraform npm zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -102,6 +105,7 @@ alias ls='ls -G'
 # git aliases
 alias gitg='git log --graph --decorate --oneline --all'
 alias gits='git status -sb'
+alias ibrew='arch -x86_64 /usr/local/bin/brew'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # fzf configuration
@@ -109,16 +113,23 @@ export FZF_DEFAULT_COMMAND='fd --type f'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_DEFAULT_OPTS="--extended"
 
-# added by travis gem
-[ -f /Users/nicolaserny/.travis/travis.sh ] && source /Users/nicolaserny/.travis/travis.sh
+export NVM_DIR="$HOME/.nvm"
+  [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && . "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+  [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && . "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+# Set Spaceship ZSH as a prompt
+export SPACESHIP_PACKAGE_SHOW=false
+export SPACESHIP_DOCKER_SHOW=false
+export SPACESHIP_KUBECTL_VERSION_SHOW=false
+export SPACESHIP_NODE_SHOW=false
+autoload -U promptinit; promptinit
+
+# Puppeteer env variables
+export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
+export PUPPETEER_EXECUTABLE_PATH="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 
 
-  # Set Spaceship ZSH as a prompt
-  export SPACESHIP_PACKAGE_SHOW=false
-  export SPACESHIP_DOCKER_SHOW=false
-  export SPACESHIP_KUBECTL_VERSION_SHOW=false
-  export SPACESHIP_NODE_SHOW=false
-  autoload -U promptinit; promptinit
-  prompt spaceship
-export PATH="/usr/local/opt/openjdk/bin:$PATH"
-export CPPFLAGS="-I/usr/local/opt/openjdk/include"
+
+source "/Users/nicolaserny/.oh-my-zsh/custom/themes/spaceship.zsh-theme"
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+
