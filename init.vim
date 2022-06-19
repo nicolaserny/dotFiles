@@ -458,4 +458,4 @@ let g:netrw_list_hide = '\(^\|\s\s\)\zs\.\S\+,\(^\|\s\s\)ntuser\.\S\+'
 command! Vimrc edit ~/.config/nvim/init.vim
 
 nnoremap <leader>es :silent exec "!yarn eslint --fix %"<CR> | redraw
-
+nmap cp :let @" = expand("%:p")<cr>
