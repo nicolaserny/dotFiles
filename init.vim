@@ -182,11 +182,16 @@ require'nvim-tree'.setup {
 local nvim_lsp = require('lspconfig')
 local on_attach = function(client, bufnr)
     local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-    if client.server_capabilities.documentFormattingProvider then
-        vim.api.nvim_command [[augroup Format]]
-        vim.api.nvim_command [[autocmd! * <buffer>]]
-        vim.api.nvim_command [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_seq_sync()]]
-        vim.api.nvim_command [[augroup END]]
+    -- Use prettier for formatting
+    if client.name == "tsserver" then
+        client.resolved_capabilities.document_formatting = false
+    else
+        if client.server_capabilities.documentFormattingProvider then
+            vim.api.nvim_command [[augroup Format]]
+            vim.api.nvim_command [[autocmd! * <buffer>]]
+            vim.api.nvim_command [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_seq_sync()]]
+            vim.api.nvim_command [[augroup END]]
+        end
     end
     -- Mappings.
     local opts = { noremap=true, silent=true }
@@ -240,6 +245,8 @@ nvim_lsp.terraformls.setup{
     capabilities = capabilities,
 }
 
+-- Do not forget to install prettier and eslint_d
+-- npm i -g eslint_d prettier
 nvim_lsp.diagnosticls.setup {
     on_attach = on_attach,
     filetypes = { 'javascript', 'javascriptreact', 'json', 'typescript', 'typescriptreact', 'css', 'less', 'scss' },
@@ -275,14 +282,10 @@ nvim_lsp.diagnosticls.setup {
         formatters = {
             eslint_d = {
                 command = 'eslint_d',
-                rootPatterns = { '.git' },
                 args = { '--stdin', '--stdin-filename', '%filename', '--fix-to-stdout' },
-                rootPatterns = { '.git' },
                 },
             prettier = {
-                command = 'prettier_d_slim',
-                rootPatterns = { '.git' },
-                -- requiredFiles: { 'prettier.config.js' },
+                command = 'prettier',
                 args = { '--stdin', '--stdin-filepath', '%filename' }
                 }
             },
