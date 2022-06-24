@@ -371,6 +371,13 @@ require('gitsigns').setup({
   current_line_blame = true,
 })
 
+function duckDuckGo()
+  local url = 'https://duckduckgo.com/?q='
+  local query = vim.fn.getreg('0')
+  vim.cmd('silent exec "!open \'' .. url .. query .. '\'"')
+end
+vim.api.nvim_set_keymap('n', '<leader>s', '<Cmd>lua duckDuckGo()<CR>', {noremap = true})
+
 EOF
 
 hi DiagnosticError guifg=#EF5350
