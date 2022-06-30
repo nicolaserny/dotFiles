@@ -149,6 +149,9 @@ require'nvim-treesitter.configs'.setup {
         "dot",
         "scss",
         "bash",
+        "c_sharp",
+        "vue",
+        "hcl",
         },
     autotag = {
         enable = true,
@@ -392,6 +395,7 @@ nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 nnoremap <leader>fk <cmd>Telescope keymaps<cr>
 nnoremap <leader>fc <cmd>Telescope commands<cr>
+nnoremap <leader>fr <cmd>Telescope command_history<cr>
 
 nnoremap <C-b> :NvimTreeToggle<CR>
 nnoremap <leader>r :NvimTreeRefresh<CR>
