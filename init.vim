@@ -374,10 +374,22 @@ require('gitsigns').setup({
   current_line_blame = true,
 })
 
+local char_to_hex = function(c)
+  return string.format("%%%02X", string.byte(c))
+end
+
+local function encode(str)
+  if str == nil then
+    return ""
+  end
+  str = str:gsub("([/. ~])", char_to_hex)
+  return str
+end
+
 function duckDuckGo()
   local url = 'https://duckduckgo.com/?q='
-  local query = vim.fn.getreg('0')
-  vim.cmd('silent exec "!open \'' .. url .. query .. '\'"')
+  local query = vim.fn.shellescape(encode(vim.fn.getreg('0')), 1)
+  vim.cmd('silent exec "!open \'' .. url .. '".shellescape(' .. query .. ')."' .. '\'"')
 end
 vim.api.nvim_set_keymap('n', '<leader>s', '<Cmd>lua duckDuckGo()<CR>', {noremap = true})
 
