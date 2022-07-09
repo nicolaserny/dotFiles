@@ -1,6 +1,7 @@
 set nocompatible
 
 let g:mapleader = "\<Space>"
+let g:copilot_filetypes = { 'markdown': v:true }
 
 " Plugins {{{
 let vimplug_exists=expand('~/.config/nvim/autoload/plug.vim')
@@ -54,7 +55,7 @@ filetype plugin indent on
 set relativenumber
 set number
 set incsearch
-set noignorecase smartcase
+set ignorecase smartcase
 set nohlsearch
 set tabstop=4
 set softtabstop=0
@@ -142,7 +143,6 @@ require'nvim-treesitter.configs'.setup {
         "html",
         "scss",
         "css",
-        "markdown",
         "lua",
         "vim",
         "dockerfile",
@@ -152,6 +152,7 @@ require'nvim-treesitter.configs'.setup {
         "c_sharp",
         "vue",
         "hcl",
+        "markdown",
         },
     autotag = {
         enable = true,

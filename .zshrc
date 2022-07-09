@@ -133,3 +133,7 @@ export PUPPETEER_EXECUTABLE_PATH="/Applications/Google Chrome.app/Contents/MacOS
 source "/Users/nicolaserny/.oh-my-zsh/custom/themes/spaceship.zsh-theme"
 export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 
+# other Aliases
+alias cd!='cd $(find . -type d -print | fzf)'
+alias nv='nvim $(find . -type d -print | fzf)'
+alias p!='sudo lsof -P -i TCP -s TCP:LISTEN'
