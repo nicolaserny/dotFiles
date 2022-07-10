@@ -383,7 +383,7 @@ local function encode(str)
   if str == nil then
     return ""
   end
-  str = str:gsub("([/. ~])", char_to_hex)
+str = str:gsub("([/. @'~()\"])", char_to_hex)
   return str
 end
 
