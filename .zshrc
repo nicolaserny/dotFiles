@@ -109,7 +109,7 @@ alias ibrew='arch -x86_64 /usr/local/bin/brew'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # fzf configuration
-export FZF_DEFAULT_COMMAND='fd --type f'
+export FZF_DEFAULT_COMMAND='fd --type f --follow --hidden --exclude .git --exclude node_modules'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_DEFAULT_OPTS="--extended"
 
@@ -134,6 +134,4 @@ source "/Users/nicolaserny/.oh-my-zsh/custom/themes/spaceship.zsh-theme"
 export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 
 # other Aliases
-alias cd!='cd $(find . -type d -print | fzf)'
-alias nv='nvim $(find . -type d -print | fzf)'
 alias p!='sudo lsof -P -i TCP -s TCP:LISTEN'
