@@ -161,14 +161,24 @@ require'nvim-treesitter.configs'.setup {
 
 
 require('telescope').setup{
+defaults = {
+file_ignore_patterns = {
+            "node_modules",
+            ".work/.*",
+            ".cache/.*",
+            ".idea/.*",
+            "dist/.*",
+            ".git/.*"
+        },
+    },
 pickers = {
     live_grep = {
         additional_args = function(opts)
-        return {"--hidden", "--ignore-file", ".gitignore"}
+        return {"--hidden" }
         end
         },
     find_files = {
-        find_command = { "rg", "--ignore-file", ".gitignore", "--hidden", "--files"},
+        find_command = { "rg", "--hidden", "--files"},
         prompt_prefix = "🔍 "
         },
     },
@@ -203,6 +213,7 @@ local on_attach = function(client, bufnr)
     buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
     buf_set_keymap('n', 'gh', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
     buf_set_keymap('n', 'gi', '<Cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+    buf_set_keymap('n', 'gr', '<Cmd>lua vim.lsp.buf.references()<CR>', opts)
     buf_set_keymap('n', '<leader>rn', '<Cmd>lua vim.lsp.buf.rename()<CR>', opts)
     buf_set_keymap('n', '<leader>ca', '<Cmd>lua vim.lsp.buf.code_action()<CR>', opts)
     buf_set_keymap('n', '<leader>f', '<Cmd>lua vim.lsp.buf.formatting()<CR>', opts)
@@ -485,5 +496,5 @@ let g:netrw_list_hide = '\(^\|\s\s\)\zs\.\S\+,\(^\|\s\s\)ntuser\.\S\+'
 command! Vimrc edit ~/.config/nvim/init.vim
 
 nnoremap <leader>es mF:%!eslint_d --stdin --fix-to-stdout --stdin-filename %<CR>`F
-" nnoremap <leader>ess :silent exec "!yarn eslint --fix %"<CR> | redraw
+nnoremap <leader>ess :silent exec "!yarn eslint --fix %"<CR> | redraw
 nmap cp :let @" = expand("%:p")<cr>
