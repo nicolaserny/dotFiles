@@ -44,6 +44,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
 
 call plug#end()
 " }}}
@@ -457,6 +458,9 @@ nnoremap <leader>n :NvimTreeFindFile<CR>
 
 nnoremap <C-n> :ToggleTerm<CR>
 
+nmap <leader>mp <Plug>MarkdownPreview
+nmap <leader>ms <Plug>MarkdownPreviewStop
+
 " remap help navigation {{{
 nmap <C-)> <C-]>
 inoremap <C-x><C-)> <C-x><C-]>
@@ -524,6 +528,7 @@ let g:netrw_liststyle=3
 let g:netrw_list_hide = '\(^\|\s\s\)\zs\.\S\+,\(^\|\s\s\)ntuser\.\S\+'
 
 command! Vimrc edit ~/.config/nvim/init.vim
+command! Gitg Git log --graph --decorate --oneline --all
 
 nnoremap <leader>es mF:%!eslint_d --stdin --fix-to-stdout --stdin-filename %<CR>`F
 nnoremap <leader>ess :silent exec "!yarn eslint --fix %"<CR> | redraw
