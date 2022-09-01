@@ -242,23 +242,15 @@ nvim_lsp.tsserver.setup {
     capabilities = capabilities
 }
 
+require'lspconfig'.eslint.setup{
+  on_attach = on_attach,
+    capabilities = capabilities,
+}
+
 nvim_lsp.cssls.setup {
   on_attach = on_attach,
   capabilities = capabilities,
 }
-
-nvim_lsp.emmet_ls.setup({
-    on_attach = on_attach,
-    capabilities = capabilities,
-    filetypes = { 'html', 'typescriptreact', 'javascriptreact', 'css', 'sass', 'scss', 'less' },
-    init_options = {
-      html = {
-        options = {
-          ["bem.enabled"] = true,
-        },
-      },
-    }
-})
 
 nvim_lsp.tailwindcss.setup{
     on_attach = on_attach,
@@ -286,39 +278,7 @@ nvim_lsp.diagnosticls.setup {
     on_attach = on_attach,
     filetypes = { 'javascript', 'javascriptreact', 'json', 'typescript', 'typescriptreact', 'css', 'less', 'scss' },
     init_options = {
-        linters = {
-            eslint = {
-                command = 'eslint_d',
-                rootPatterns = { '.git' },
-                debounce = 100,
-                args = { '--stdin', '--stdin-filename', '%filepath', '--format', 'json' },
-                sourceName = 'eslint_d',
-                parseJson = {
-                    errorsRoot = '[0].messages',
-                    line = 'line',
-                    column = 'column',
-                    endLine = 'endLine',
-                    endColumn = 'endColumn',
-                    message = '[eslint] ${message} [${ruleId}]',
-                    security = 'severity'
-                    },
-                securities = {
-                    [2] = 'error',
-                    [1] = 'warning'
-                    }
-                },
-            },
-        filetypes = {
-            javascript = 'eslint',
-            javascriptreact = 'eslint',
-            typescript = 'eslint',
-            typescriptreact = 'eslint',
-            },
         formatters = {
-            eslint_d = {
-                command = 'eslint_d',
-                args = { '--stdin', '--stdin-filename', '%filename', '--fix-to-stdout' },
-                },
             prettier = {
                 command = 'prettier',
                 args = { '--stdin', '--stdin-filepath', '%filename' }
@@ -374,7 +334,7 @@ cmp.setup({
       { name = 'luasnip' },
     }),
     formatting = {
-      format = lspkind.cmp_format({with_text = false, maxwidth = 50})
+      format = lspkind.cmp_format({maxwidth = 50, mode = 'symbol'})
     }
   })
 
@@ -549,6 +509,6 @@ let g:netrw_list_hide = '\(^\|\s\s\)\zs\.\S\+,\(^\|\s\s\)ntuser\.\S\+'
 command! Vimrc edit ~/.config/nvim/init.vim
 command! Gitg Git log --graph --decorate --oneline --all
 
-nnoremap <leader>es mF:%!eslint_d --stdin --fix-to-stdout --stdin-filename %<CR>`F
+nnoremap <leader>es EslintFixAll
 nnoremap <leader>ess :silent exec "!yarn eslint --fix %"<CR> | redraw
 nmap cp :let @" = expand("%:p")<cr>
