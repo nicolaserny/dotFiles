@@ -1,7 +1,7 @@
 set nocompatible
 
 let g:mapleader = "\<Space>"
-let g:copilot_filetypes = { 'markdown': v:true }
+" let g:copilot_filetypes = { 'markdown': v:true }
 
 " Plugins {{{
 let vimplug_exists=expand('~/.config/nvim/autoload/plug.vim')
@@ -34,7 +34,9 @@ Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
 Plug 'haishanh/night-owl.vim'
-Plug 'github/copilot.vim'
+" Plug 'github/copilot.vim'
+Plug 'windwp/nvim-autopairs'
+Plug 'windwp/nvim-ts-autotag'
 Plug 'akinsho/toggleterm.nvim'
 
 Plug 'lewis6991/gitsigns.nvim'
@@ -125,6 +127,9 @@ require("nvim-lsp-installer").setup {
         }
     }
 }
+require('nvim-ts-autotag').setup();
+require("nvim-autopairs").setup {};
+
 require'nvim-treesitter.configs'.setup {
     highlight = {
         enable = true,
@@ -213,6 +218,7 @@ local on_attach = function(client, bufnr)
     buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
     buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
     buf_set_keymap('n', 'gh', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
+    buf_set_keymap('n', 'gs', '<Cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
     buf_set_keymap('n', 'gi', '<Cmd>lua vim.lsp.buf.implementation()<CR>', opts)
     buf_set_keymap('n', 'gr', '<Cmd>lua vim.lsp.buf.references()<CR>', opts)
     buf_set_keymap('n', '<leader>rn', '<Cmd>lua vim.lsp.buf.rename()<CR>', opts)
@@ -240,6 +246,19 @@ nvim_lsp.cssls.setup {
   on_attach = on_attach,
   capabilities = capabilities,
 }
+
+nvim_lsp.emmet_ls.setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+    filetypes = { 'html', 'typescriptreact', 'javascriptreact', 'css', 'sass', 'scss', 'less' },
+    init_options = {
+      html = {
+        options = {
+          ["bem.enabled"] = true,
+        },
+      },
+    }
+})
 
 nvim_lsp.tailwindcss.setup{
     on_attach = on_attach,
