@@ -32,6 +32,7 @@ Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'L3MON4D3/LuaSnip'
 Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+Plug 'nvim-treesitter/nvim-treesitter-context'
 
 Plug 'haishanh/night-owl.vim'
 " Plug 'github/copilot.vim'
@@ -165,6 +166,27 @@ require'nvim-treesitter.configs'.setup {
         }
     }
 
+require("treesitter-context").setup{
+        enable = true,
+        throttle = true, -- Throttles plugin updates (may improve performance)
+        max_lines = 0, -- How many lines the window should span. Values <= 0 mean no limit.
+        patterns = {
+            default = {
+                "function",
+                "method",
+                "for",
+                "while",
+                "if",
+                "switch",
+                "case",
+            },
+            typescript = {
+                "class_declaration",
+                "abstract_class_declaration",
+                "else_clause",
+            },
+        },
+    }
 
 require('telescope').setup{
 defaults = {
@@ -415,6 +437,16 @@ function duckDuckGo()
 end
 vim.api.nvim_set_keymap('n', '<leader>s', '<Cmd>lua duckDuckGo()<CR>', {noremap = true})
 
+function grepWithCurrentWord()
+    require('telescope.builtin').grep_string { search = vim.fn.expand("<cword>") }
+end
+vim.api.nvim_set_keymap('n', '<leader>fw', '<Cmd>lua grepWithCurrentWord()<CR>', {noremap = true})
+
+function commandHistory()
+    require("telescope.builtin").command_history({sorter = require("telescope.sorters").get_substr_matcher()})
+end
+vim.api.nvim_set_keymap('n', '<leader>fr', '<Cmd>lua commandHistory()<CR>', {noremap = true})
+
 EOF
 
 hi DiagnosticError guifg=#EF5350
@@ -429,7 +461,7 @@ nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 nnoremap <leader>fk <cmd>Telescope keymaps<cr>
 nnoremap <leader>fc <cmd>Telescope commands<cr>
-nnoremap <leader>fr <cmd>Telescope command_history<cr>
+nnoremap <leader>fp <cmd>Telescope resume<cr>
 
 nnoremap <C-b> :NvimTreeToggle<CR>
 nnoremap <leader>r :NvimTreeRefresh<CR>
@@ -508,7 +540,8 @@ let g:netrw_list_hide = '\(^\|\s\s\)\zs\.\S\+,\(^\|\s\s\)ntuser\.\S\+'
 
 command! Vimrc edit ~/.config/nvim/init.vim
 command! Gitg Git log --graph --decorate --oneline --all
+nnoremap <leader>hf :Git fetch --all --prune<CR>
 
-nnoremap <leader>es EslintFixAll
+nnoremap <leader>es :EslintFixAll<CR>
 nnoremap <leader>ess :silent exec "!yarn eslint --fix %"<CR> | redraw
 nmap cp :let @" = expand("%:p")<cr>
