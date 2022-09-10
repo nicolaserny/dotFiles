@@ -111,8 +111,6 @@ let airline#extensions#tabline#show_splits = 0
 let g:airline_solarized_bg='dark'
 let g:airline#extensions#syntastic#enabled = 1
 let g:airline_powerline_fonts = 1
-let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
-let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
 set laststatus=2
 set showtabline=0
 " }}}
@@ -188,8 +186,17 @@ require("treesitter-context").setup{
         },
     }
 
+local actions = require "telescope.actions"
 require('telescope').setup{
 defaults = {
+    mappings = {
+            i = {
+                ["<C-s>"] = actions.send_selected_to_qflist + actions.open_qflist,
+                },
+            n = {
+                ["<C-s>"] = actions.send_selected_to_qflist + actions.open_qflist,
+                }
+            },
 file_ignore_patterns = {
             "node_modules",
             ".work/.*",
@@ -294,11 +301,16 @@ nvim_lsp.terraformls.setup{
     capabilities = capabilities,
 }
 
+nvim_lsp.vimls.setup{
+    on_attach = on_attach,
+    capabilities = capabilities,
+}
+
 -- Do not forget to install prettier and eslint_d
 -- npm i -g eslint_d prettier
 nvim_lsp.diagnosticls.setup {
     on_attach = on_attach,
-    filetypes = { 'javascript', 'javascriptreact', 'json', 'typescript', 'typescriptreact', 'css', 'less', 'scss' },
+    filetypes = { 'javascript', 'javascriptreact', 'json', 'typescript', 'typescriptreact', 'css', 'less', 'scss', "markdown" },
     init_options = {
         formatters = {
             prettier = {
@@ -316,6 +328,7 @@ nvim_lsp.diagnosticls.setup {
             typescript = 'prettier',
             typescriptreact = 'prettier',
             json = 'prettier',
+            markdown = 'prettier',
             }
         }
     }
@@ -333,6 +346,11 @@ vim.lsp.diagnostic.on_publish_diagnostics, {
 
 local cmp = require'cmp'
 local lspkind = require'lspkind'
+local source_mapping = {
+	buffer = "[Buffer]",
+	nvim_lsp = "[LSP]",
+	luasnip = "[Snip]",
+}
 
 cmp.setup({
     snippet = {
@@ -356,9 +374,16 @@ cmp.setup({
       { name = 'luasnip' },
     }),
     formatting = {
-      format = lspkind.cmp_format({maxwidth = 50, mode = 'symbol'})
-    }
+		format = function(entry, vim_item)
+			vim_item.kind = lspkind.presets.default[vim_item.kind]
+			local menu = source_mapping[entry.source.name]
+			vim_item.menu = menu
+			return vim_item
+		end
+	},
   })
+
+  --    format = lspkind.cmp_format({maxwidth = 50, mode = 'symbol'})
 
 vim.cmd [[highlight! default link CmpItemKind CmpItemMenuDefault]]
 
@@ -545,3 +570,8 @@ nnoremap <leader>hf :Git fetch --all --prune<CR>
 nnoremap <leader>es :EslintFixAll<CR>
 nnoremap <leader>ess :silent exec "!yarn eslint --fix %"<CR> | redraw
 nmap cp :let @" = expand("%:p")<cr>
+map <leader>o :%bd\|e#<cr>
+
+" increment/decrement numbers
+nnoremap + <C-a>
+nnoremap - <C-x>
