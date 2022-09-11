@@ -2,6 +2,10 @@ set nocompatible
 
 let g:mapleader = "\<Space>"
 " let g:copilot_filetypes = { 'markdown': v:true }
+let g:loaded_python3_provider = 0
+let g:loaded_ruby_provider = 0
+let g:loaded_perl_provider = 0
+let g:loaded_node_provider = 0
 
 " Plugins {{{
 let vimplug_exists=expand('~/.config/nvim/autoload/plug.vim')
@@ -42,8 +46,7 @@ Plug 'akinsho/toggleterm.nvim'
 
 Plug 'lewis6991/gitsigns.nvim'
 
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+Plug 'nvim-lualine/lualine.nvim'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
@@ -90,7 +93,7 @@ set belloff=all
 " }}}
 
 " Better display for messages
-set cmdheight=2
+set cmdheight=1
 
 " Encoding {{{
 set encoding=utf-8
@@ -105,17 +108,15 @@ let g:lightline = { 'colorscheme': 'nightowl' }
 set termguicolors
 " }}}
 
-" Airline {{{
-let airline#extensions#tabline#tabs_label = ''
-let airline#extensions#tabline#show_splits = 0
-let g:airline_solarized_bg='dark'
-let g:airline#extensions#syntastic#enabled = 1
-let g:airline_powerline_fonts = 1
+" statusline {{{
 set laststatus=2
 set showtabline=0
 " }}}
 
 lua<< EOF
+
+require('lualine').setup()
+
 require("nvim-lsp-installer").setup {
     automatic_installation = true, -- automatically detect which servers to install (based on which servers are set up via lspconfig)
     ui = {
