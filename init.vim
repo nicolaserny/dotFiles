@@ -307,11 +307,15 @@ nvim_lsp.vimls.setup{
     capabilities = capabilities,
 }
 
+nvim_lsp.vuels.setup{
+    on_attach = on_attach,
+    capabilities = capabilities,
+}
 -- Do not forget to install prettier and eslint_d
 -- npm i -g eslint_d prettier
 nvim_lsp.diagnosticls.setup {
     on_attach = on_attach,
-    filetypes = { 'javascript', 'javascriptreact', 'json', 'typescript', 'typescriptreact', 'css', 'less', 'scss', "markdown" },
+    filetypes = { 'javascript', 'javascriptreact', 'json', 'typescript', 'typescriptreact', 'css', 'less', 'scss', "markdown", "vue" },
     init_options = {
         formatters = {
             prettier = {
@@ -330,6 +334,7 @@ nvim_lsp.diagnosticls.setup {
             typescriptreact = 'prettier',
             json = 'prettier',
             markdown = 'prettier',
+            vue = 'prettier',
             }
         }
     }
