@@ -116,7 +116,7 @@ set showtabline=0
 
 lua<< EOF
 
-require('lualine').setup()
+require('lualine').setup{};
 
 require("nvim-lsp-installer").setup {
     automatic_installation = true, -- automatically detect which servers to install (based on which servers are set up via lspconfig)
@@ -231,7 +231,15 @@ require'nvim-tree'.setup {
     }
 
 local saga = require('lspsaga')
-saga.init_lsp_saga()
+saga.init_lsp_saga({
+symbol_in_winbar = {
+    in_custom = false,
+    enable = true,
+    separator = ' ',
+    show_file = true,
+    click_support = false,
+}
+})
 local opts = { noremap = true, silent = true }
 vim.keymap.set('n', '<leader>)', '<Cmd>Lspsaga diagnostic_jump_next<CR>', opts)
 vim.keymap.set('n', '<leader>(', '<Cmd>Lspsaga diagnostic_jump_prev<CR>', opts)
