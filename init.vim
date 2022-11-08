@@ -519,7 +519,7 @@ nmap <leader>mp <Plug>MarkdownPreview
 nmap <leader>ms <Plug>MarkdownPreviewStop
 
 " remap help navigation {{{
-nmap <C-)> <C-]>
+nnoremap <C-)> <C-]>
 inoremap <C-x><C-)> <C-x><C-]>
 " }}}
 
@@ -555,6 +555,11 @@ nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
+" }}}
+
+" vimdiff {{{
+nnoremap <leader>dn ]c
+nnoremap <leader>dp [c
 " }}}
 
 set splitright
