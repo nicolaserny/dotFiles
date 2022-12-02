@@ -592,13 +592,16 @@ let g:netrw_list_hide = '\(^\|\s\s\)\zs\.\S\+,\(^\|\s\s\)ntuser\.\S\+'
 command! Vimrc edit ~/.config/nvim/init.vim
 command! Gitg Git log --graph --decorate --oneline --all
 nnoremap <leader>hf :Git fetch --all --prune<CR>
+nnoremap <leader>ha :Git add -A<CR>
 
 nnoremap <leader>es :EslintFixAll<CR>
 nnoremap <leader>ess :silent exec "!yarn eslint --fix %"<CR> | redraw
 nmap cp :let @" = expand("%:p")<cr>
+" Close all other buffers
 map <leader>o :%bd\|e#<cr>
 
 " increment/decrement numbers
+" g<C-a> to increment a list of numbers
 nnoremap + <C-a>
 nnoremap - <C-x>
 
