@@ -605,3 +605,8 @@ map <leader>o :%bd\|e#<cr>
 nnoremap + <C-a>
 nnoremap - <C-x>
 
+nnoremap <C-d> <C-d>zz
+nnoremap <C-u> <C-u>zz
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
