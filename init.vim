@@ -558,6 +558,9 @@ nnoremap <C-H> <C-W><C-H>
 " }}}
 
 " vimdiff {{{
+nnoremap <leader>dd :Gvdiffsplit<CR>
+nnoremap <leader>dl :diffget //2<CR>
+nnoremap <leader>dr :diffget //3<CR>
 nnoremap <leader>dn ]c
 nnoremap <leader>dp [c
 " }}}
