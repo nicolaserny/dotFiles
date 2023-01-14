@@ -20,7 +20,8 @@ if !filereadable(vimplug_exists)
 endif
 
 call plug#begin('~/.config/nvim/bundle')
-Plug 'williamboman/nvim-lsp-installer'
+Plug 'williamboman/mason.nvim'
+Plug 'williamboman/mason-lspconfig.nvim'
 Plug 'neovim/nvim-lspconfig'
 Plug 'glepnir/lspsaga.nvim', { 'branch': 'main' }
 Plug 'hrsh7th/cmp-nvim-lsp'
@@ -105,7 +106,6 @@ set fileencodings=utf-8
 " Turn-on color scheme {{{
 syntax on
 colorscheme night-owl
-let g:lightline = { 'colorscheme': 'nightowl' }
 set termguicolors
 " }}}
 
@@ -118,16 +118,20 @@ lua<< EOF
 
 require('lualine').setup{};
 
-require("nvim-lsp-installer").setup {
-    automatic_installation = true, -- automatically detect which servers to install (based on which servers are set up via lspconfig)
+require("mason").setup {
     ui = {
         icons = {
-            server_installed = "✓",
-            server_pending = "➜",
-            server_uninstalled = "✗"
+            package_installed = "✓",
+            package_pending = "➜",
+            package_uninstalled = "✗",
         }
     }
-}
+};
+require("mason-lspconfig").setup {
+    ensure_installed = { "cssls", "diagnosticls", "dockerls", "eslint", "html", "tailwindcss", "terraformls","tsserver","vimls", "vuels" },
+    automatic_installation = true,
+};
+
 require('nvim-ts-autotag').setup();
 require("nvim-autopairs").setup {};
 
@@ -231,15 +235,20 @@ require'nvim-tree'.setup {
     }
 
 local saga = require('lspsaga')
-saga.init_lsp_saga({
+saga.setup({
 symbol_in_winbar = {
-    in_custom = false,
-    enable = true,
-    separator = ' ',
-    show_file = true,
-    click_support = false,
-}
+		enable = true,
+		separator = ' ',
+		hide_keyword = true,
+		show_file = true,
+		folder_level = 2,
+	},
+    ui = {
+		theme = 'round',
+		border = 'single',
+	},
 })
+
 local opts = { noremap = true, silent = true }
 vim.keymap.set('n', '<leader>)', '<Cmd>Lspsaga diagnostic_jump_next<CR>', opts)
 vim.keymap.set('n', '<leader>(', '<Cmd>Lspsaga diagnostic_jump_prev<CR>', opts)
@@ -270,7 +279,7 @@ local on_attach = function(client, bufnr)
 end
 
 
-local capabilities = require('cmp_nvim_lsp').update_capabilities(
+local capabilities = require('cmp_nvim_lsp').default_capabilities(
   vim.lsp.protocol.make_client_capabilities()
 )
 capabilities.textDocument.completion.completionItem.snippetSupport = true
