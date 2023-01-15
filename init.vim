@@ -40,7 +40,8 @@ Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'nvim-treesitter/nvim-treesitter-context'
 
-Plug 'haishanh/night-owl.vim'
+" Plug 'haishanh/night-owl.vim'
+Plug 'EdenEast/nightfox.nvim'
 " Plug 'github/copilot.vim'
 Plug 'windwp/nvim-autopairs'
 Plug 'windwp/nvim-ts-autotag'
@@ -105,7 +106,7 @@ set fileencodings=utf-8
 
 " Turn-on color scheme {{{
 syntax on
-colorscheme night-owl
+colorscheme nightfox
 set termguicolors
 " }}}
 
