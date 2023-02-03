@@ -55,6 +55,9 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
 
+Plug 'rafamadriz/friendly-snippets'
+Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v1.x'}
+
 call plug#end()
 " }}}
 
@@ -119,19 +122,109 @@ lua<< EOF
 
 require('lualine').setup{};
 
-require("mason").setup {
-    ui = {
-        icons = {
-            package_installed = "✓",
-            package_pending = "➜",
-            package_uninstalled = "✗",
+local lsp = require("lsp-zero")
+
+lsp.preset("recommended")
+
+lsp.ensure_installed({
+   "cssls", "diagnosticls", "dockerls", "eslint", "html", "tailwindcss",
+   "terraformls","tsserver","vimls", "vuels" 
+})
+
+local on_attach = function(client, bufnr)
+    local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+    -- Use prettier for formatting
+    if client.name == "tsserver" then
+        client.server_capabilities.documentFormattingProvider = false
+    else
+        if client.server_capabilities.documentFormattingProvider then
+            vim.api.nvim_command [[augroup Format]]
+            vim.api.nvim_command [[autocmd! * <buffer>]]
+            vim.api.nvim_command [[autocmd BufWritePre <buffer> lua vim.lsp.buf.format()]]
+            vim.api.nvim_command [[augroup END]]
+        end
+    end
+    -- Mappings.
+    local opts = { noremap=true, silent=true }
+    buf_set_keymap('n', '<leader>f', '<Cmd>lua vim.lsp.buf.format()<CR>', opts)
+end
+lsp.on_attach(on_attach);
+
+-- Do not forget to install prettier
+-- npm i -g eslint_d prettier
+lsp.configure('diagnosticls', {
+    on_attach = on_attach,
+    filetypes = { 'javascript', 'javascriptreact', 'json', 'typescript', 'typescriptreact', 'css', 'less', 'scss', "markdown", "vue" },
+    init_options = {
+        formatters = {
+            prettier = {
+                command = 'prettier',
+                args = { '--stdin', '--stdin-filepath', '%filename' }
+                }
+            },
+        formatFiletypes = {
+            css = 'prettier',
+            javascript = 'prettier',
+            javascriptreact = 'prettier',
+            json = 'prettier',
+            scss = 'prettier',
+            less = 'prettier',
+            typescript = 'prettier',
+            typescriptreact = 'prettier',
+            json = 'prettier',
+            markdown = 'prettier',
+            vue = 'prettier',
+            }
         }
-    }
-};
-require("mason-lspconfig").setup {
-    ensure_installed = { "cssls", "diagnosticls", "dockerls", "eslint", "html", "tailwindcss", "terraformls","tsserver","vimls", "vuels" },
-    automatic_installation = true,
-};
+})
+
+local cmp = require'cmp'
+local lspkind = require'lspkind'
+local source_mapping = {
+	buffer = "[Buffer]",
+	nvim_lsp = "[LSP]",
+	luasnip = "[Snip]",
+}
+
+lsp.setup_nvim_cmp({
+    mapping = cmp.mapping.preset.insert({
+      ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+      ['<C-f>'] = cmp.mapping.scroll_docs(4),
+      ['<C-Space>'] = cmp.mapping.complete(),
+      ['<C-e>'] = cmp.mapping.close(),
+      ['<CR>'] = cmp.mapping.confirm({
+        behavior = cmp.ConfirmBehavior.Replace,
+        select = true
+      }),
+    }),
+    formatting = {
+		format = function(entry, vim_item)
+			vim_item.kind = lspkind.presets.default[vim_item.kind]
+			local menu = source_mapping[entry.source.name]
+			vim_item.menu = menu
+			return vim_item
+		end
+	},
+  })
+
+lsp.setup()
+
+vim.diagnostic.config({
+  virtual_text = true,
+  signs = true,
+  update_in_insert = false,
+  underline = true,
+  severity_sort = true,
+  float = {
+    focusable = false,
+    style = 'minimal',
+    border = 'rounded',
+    source = 'always',
+    header = '',
+    prefix = '',
+  },
+})
+
 
 require('nvim-ts-autotag').setup();
 require("nvim-autopairs").setup {};
@@ -260,153 +353,6 @@ vim.keymap.set('n', '<leader>rn', '<Cmd>Lspsaga rename<CR>', opts)
 vim.keymap.set('n', '<leader>ca', '<Cmd>Lspsaga code_action<CR>', opts)
 vim.keymap.set('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
 
-local nvim_lsp = require('lspconfig')
-local on_attach = function(client, bufnr)
-    local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-    -- Use prettier for formatting
-    if client.name == "tsserver" then
-        client.server_capabilities.documentFormattingProvider = false
-    else
-        if client.server_capabilities.documentFormattingProvider then
-            vim.api.nvim_command [[augroup Format]]
-            vim.api.nvim_command [[autocmd! * <buffer>]]
-            vim.api.nvim_command [[autocmd BufWritePre <buffer> lua vim.lsp.buf.format()]]
-            vim.api.nvim_command [[augroup END]]
-        end
-    end
-    -- Mappings.
-    local opts = { noremap=true, silent=true }
-    buf_set_keymap('n', '<leader>f', '<Cmd>lua vim.lsp.buf.format()<CR>', opts)
-end
-
-
-local capabilities = require('cmp_nvim_lsp').default_capabilities(
-  vim.lsp.protocol.make_client_capabilities()
-)
-capabilities.textDocument.completion.completionItem.snippetSupport = true
-
-nvim_lsp.tsserver.setup {
-    on_attach = on_attach,
-    filetypes = { 'javascript', 'javascriptreact', "typescript", "typescriptreact", "typescript.tsx" },
-    capabilities = capabilities
-}
-
-require'lspconfig'.eslint.setup{
-  on_attach = on_attach,
-    capabilities = capabilities,
-}
-
-nvim_lsp.cssls.setup {
-  on_attach = on_attach,
-  capabilities = capabilities,
-}
-
-nvim_lsp.tailwindcss.setup{
-    on_attach = on_attach,
-    capabilities = capabilities,
-}
-
-nvim_lsp.dockerls.setup{
-    on_attach = on_attach,
-    capabilities = capabilities,
-}
-
-nvim_lsp.html.setup{
-    on_attach = on_attach,
-    capabilities = capabilities,
-}
-
-nvim_lsp.terraformls.setup{
-    on_attach = on_attach,
-    capabilities = capabilities,
-}
-
-nvim_lsp.vimls.setup{
-    on_attach = on_attach,
-    capabilities = capabilities,
-}
-
-nvim_lsp.vuels.setup{
-    on_attach = on_attach,
-    capabilities = capabilities,
-}
--- Do not forget to install prettier and eslint_d
--- npm i -g eslint_d prettier
-nvim_lsp.diagnosticls.setup {
-    on_attach = on_attach,
-    filetypes = { 'javascript', 'javascriptreact', 'json', 'typescript', 'typescriptreact', 'css', 'less', 'scss', "markdown", "vue" },
-    init_options = {
-        formatters = {
-            prettier = {
-                command = 'prettier',
-                args = { '--stdin', '--stdin-filepath', '%filename' }
-                }
-            },
-        formatFiletypes = {
-            css = 'prettier',
-            javascript = 'prettier',
-            javascriptreact = 'prettier',
-            json = 'prettier',
-            scss = 'prettier',
-            less = 'prettier',
-            typescript = 'prettier',
-            typescriptreact = 'prettier',
-            json = 'prettier',
-            markdown = 'prettier',
-            vue = 'prettier',
-            }
-        }
-    }
-
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-vim.lsp.diagnostic.on_publish_diagnostics, {
-    underline = true,
-    -- This sets the spacing and the prefix, obviously.
-    virtual_text = {
-        spacing = 4,
-        prefix = ''
-        }
-    }
-)
-
-local cmp = require'cmp'
-local lspkind = require'lspkind'
-local source_mapping = {
-	buffer = "[Buffer]",
-	nvim_lsp = "[LSP]",
-	luasnip = "[Snip]",
-}
-
-cmp.setup({
-    snippet = {
-      expand = function(args)
-        require('luasnip').lsp_expand(args.body)
-      end,
-    },
-    mapping = cmp.mapping.preset.insert({
-      ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-      ['<C-f>'] = cmp.mapping.scroll_docs(4),
-      ['<C-Space>'] = cmp.mapping.complete(),
-      ['<C-e>'] = cmp.mapping.close(),
-      ['<CR>'] = cmp.mapping.confirm({
-        behavior = cmp.ConfirmBehavior.Replace,
-        select = true
-      }),
-    }),
-    sources = cmp.config.sources({
-      { name = 'nvim_lsp' },
-      { name = 'buffer' },
-      { name = 'luasnip' },
-    }),
-    formatting = {
-		format = function(entry, vim_item)
-			vim_item.kind = lspkind.presets.default[vim_item.kind]
-			local menu = source_mapping[entry.source.name]
-			vim_item.menu = menu
-			return vim_item
-		end
-	},
-  })
 
   --    format = lspkind.cmp_format({maxwidth = 50, mode = 'symbol'})
 
@@ -485,7 +431,7 @@ function duckDuckGo()
   local query = vim.fn.shellescape(encode(vim.fn.getreg('0')), 1)
   vim.cmd('silent exec "!open \'' .. url .. '".shellescape(' .. query .. ')."' .. '\'"')
 end
-vim.api.nvim_set_keymap('n', '<leader>s', '<Cmd>lua duckDuckGo()<CR>', {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>s', '<Cmd>lua duckDuckGo()<CR>', {noremap = true, silent = true})
 
 function grepWithCurrentWord()
     require('telescope.builtin').grep_string { search = vim.fn.expand("<cword>") }
