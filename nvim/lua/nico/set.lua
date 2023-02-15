@@ -31,7 +31,6 @@ vim.opt.hidden = true
 vim.opt.bg = "dark"
 vim.opt.pastetoggle = "<F2>"
 vim.opt.belloff = "all"
-vim.opt.splitright = true
 vim.opt.completeopt = { 'menuone', 'noinsert', 'noselect' }
 vim.opt.previewheight = 5
 
