@@ -99,6 +99,7 @@ return require('packer').startup(function(use)
         ft = { "markdown" },
     })
 
-    use("folke/zen-mode.nvim")
+    use('folke/zen-mode.nvim')
     use('theprimeagen/harpoon')
+    use('mbbill/undotree')
 end)

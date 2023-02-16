@@ -15,6 +15,8 @@ vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 vim.opt.backup = false
 vim.opt.swapfile = false
+vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
+vim.opt.undofile = true
 vim.opt.wrap = false
 vim.opt.ruler = true
 vim.opt.history = 200
@@ -33,6 +35,7 @@ vim.opt.pastetoggle = "<F2>"
 vim.opt.belloff = "all"
 vim.opt.completeopt = { 'menuone', 'noinsert', 'noselect' }
 vim.opt.previewheight = 5
+vim.opt.updatetime = 50
 
 -- Better display for messages
 vim.opt.cmdheight = 1
