@@ -98,4 +98,6 @@ return require('packer').startup(function(use)
         setup = function() vim.g.mkdp_filetypes = { "markdown" } end,
         ft = { "markdown" },
     })
+
+    use("folke/zen-mode.nvim")
 end)
