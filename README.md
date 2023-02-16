@@ -1,6 +1,6 @@
 # My config files
 
 - .bashrc
-- brew.list: list of brew packages
-- init.vim
-- vscode settings
+- .zshrc
+- brew dump
+- nvim lua configuration

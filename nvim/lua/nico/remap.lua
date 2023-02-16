@@ -16,6 +16,11 @@ vim.keymap.set('n', '<leader>bn', ':bn<cr>')
 vim.keymap.set('n', '<leader>bp', ':bp<cr>')
 vim.keymap.set('n', '<leader>bd', ':bd<cr>')
 
+vim.keymap.set('n', '<C-h>', '<C-w>h')
+vim.keymap.set('n', '<C-j>', '<C-w>j')
+vim.keymap.set('n', '<C-k>', '<C-w>k')
+vim.keymap.set('n', '<C-l>', '<C-w>l')
+
 -- terminal mode
 vim.keymap.set('t', '<C-c><C-c>', '<C-\\><C-n>')
 vim.keymap.set('t', '<C-h>', '<C-\\><C-N><C-w>h')
