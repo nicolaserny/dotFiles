@@ -7,8 +7,7 @@ lsp.ensure_installed({
     "terraformls", "tsserver", "vimls", "vuels", "lua_ls",
 })
 
-local on_attach = function(client, bufnr)
-    local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+local on_attach = function(client)
     -- Use prettier for formatting
     if client.name == "tsserver" then
         client.server_capabilities.documentFormattingProvider = false
@@ -20,9 +19,6 @@ local on_attach = function(client, bufnr)
             vim.api.nvim_command [[augroup END]]
         end
     end
-    -- Mappings.
-    local opts = { noremap = true, silent = true }
-    buf_set_keymap('n', '<leader>f', '<Cmd>lua vim.lsp.buf.format()<CR>', opts)
 end
 lsp.on_attach(on_attach);
 

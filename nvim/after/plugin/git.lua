@@ -32,12 +32,13 @@ require('gitsigns').setup({
     end
 })
 
-vim.keymap.set('n', '<leader>dd', ':Gvdiffsplit!<CR>')
-vim.keymap.set('n', '<leader>dl', ':diffget //2<CR>')
-vim.keymap.set('n', '<leader>dr', ':diffget //3<CR>')
-vim.keymap.set('n', '<leader>dn', ']c')
-vim.keymap.set('n', '<leader>dp', '[c')
+vim.keymap.set('n', '<leader>gd', ':Gvdiffsplit!<CR>')
+vim.keymap.set('n', '<leader>gl', ':diffget //2<CR>')
+vim.keymap.set('n', '<leader>gr', ':diffget //3<CR>')
+vim.keymap.set('n', '<leader>gn', ']c')
+vim.keymap.set('n', '<leader>gp', '[c')
 
 vim.api.nvim_create_user_command('Gitg', 'Git log --graph --decorate --oneline --all', { nargs = 0 })
-vim.keymap.set('n', '<leader>hf', ':Git fetch --all --prune<CR>')
-vim.keymap.set('n', '<leader>ha', ':Git add -A<CR>')
+vim.keymap.set('n', '<leader>gf', ':Git fetch --all --prune<CR>')
+vim.keymap.set('n', '<leader>ga', ':Git add -A<CR>')
+vim.keymap.set("n", "<leader>gs", vim.cmd.Git);
