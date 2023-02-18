@@ -135,3 +135,7 @@ export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 
 # other Aliases
 alias p!='sudo lsof -P -i TCP -s TCP:LISTEN'
+
+
+export PATH="$HOME/.local/scripts/:$PATH"
+bindkey -s ^f "tmux-sessionizer\n"
