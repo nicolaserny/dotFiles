@@ -3,7 +3,7 @@ local lsp = require("lsp-zero")
 lsp.preset("recommended")
 
 lsp.ensure_installed({
-    "cssls", "diagnosticls", "dockerls", "eslint", "html", "tailwindcss",
+    "cssls", "dockerls", "eslint", "html", "tailwindcss",
     "terraformls", "tsserver", "vimls", "vuels", "lua_ls",
 })
 
@@ -22,31 +22,13 @@ local on_attach = function(client)
 end
 lsp.on_attach(on_attach);
 
--- Do not forget to install prettier
--- npm i -g eslint_d prettier
-lsp.configure('diagnosticls', {
+local null_ls = require("null-ls")
+
+null_ls.setup({
+    sources = {
+        null_ls.builtins.formatting.prettier,
+    },
     on_attach = on_attach,
-    filetypes = { 'javascript', 'javascriptreact', 'json', 'typescript', 'typescriptreact', 'css', 'less', 'scss', "markdown", "vue" },
-    init_options = {
-        formatters = {
-            prettier = {
-                command = 'prettier',
-                args = { '--stdin', '--stdin-filepath', '%filename' }
-            }
-        },
-        formatFiletypes = {
-            css = 'prettier',
-            javascript = 'prettier',
-            javascriptreact = 'prettier',
-            json = 'prettier',
-            scss = 'prettier',
-            less = 'prettier',
-            typescript = 'prettier',
-            typescriptreact = 'prettier',
-            markdown = 'prettier',
-            vue = 'prettier',
-        }
-    }
 })
 
 lsp.configure('lua_ls', {
