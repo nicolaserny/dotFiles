@@ -16,7 +16,7 @@ function DuckDuckGo()
     vim.cmd('silent exec "!open \'' .. url .. '".shellescape(' .. query .. ')."' .. '\'"')
 end
 
-vim.api.nvim_set_keymap('n', '<leader>s', '<Cmd>lua DuckDuckGo()<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>k', '<Cmd>lua DuckDuckGo()<CR>', { noremap = true, silent = true })
 
 vim.cmd([[augroup personal]])
 vim.cmd([[autocmd!]])
