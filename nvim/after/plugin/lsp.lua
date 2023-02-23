@@ -99,6 +99,9 @@ saga.setup({
         show_file = true,
         folder_level = 2,
     },
+    diagnostic = {
+        on_insert = false,
+    },
     ui = {
         theme = 'round',
         border = 'single',
