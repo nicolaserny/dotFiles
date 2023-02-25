@@ -7,7 +7,8 @@ lsp.ensure_installed({
     "terraformls", "tsserver", "vimls", "vuels", "lua_ls",
 })
 
-local on_attach = function(client)
+local on_attach = function(client, bufnr)
+    local opts = { buffer = bufnr, remap = false }
     -- Use prettier for formatting
     if client.name == "tsserver" then
         client.server_capabilities.documentFormattingProvider = false
@@ -19,6 +20,16 @@ local on_attach = function(client)
             vim.api.nvim_command [[augroup END]]
         end
     end
+    vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
+    vim.keymap.set("n", "gh", function() vim.lsp.buf.hover() end, opts)
+    vim.keymap.set("n", "<leader>vs", function() vim.lsp.buf.workspace_symbol() end, opts)
+    vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.open_float() end, opts)
+    vim.keymap.set("n", "<leader>)", function() vim.diagnostic.goto_next() end, opts)
+    vim.keymap.set("n", "<leader>(", function() vim.diagnostic.goto_prev() end, opts)
+    vim.keymap.set("n", "<leader>ca", function() vim.lsp.buf.code_action() end, opts)
+    vim.keymap.set("n", "<leader>vr", function() vim.lsp.buf.references() end, opts)
+    vim.keymap.set("n", "<leader>rn", function() vim.lsp.buf.rename() end, opts)
+    vim.keymap.set("i", "<C-v>", function() vim.lsp.buf.signature_help() end, opts)
 end
 lsp.on_attach(on_attach);
 
@@ -50,18 +61,16 @@ local source_mapping = {
     nvim_lsp = "[LSP]",
     luasnip = "[Snip]",
 }
+local cmp_select = { behavior = cmp.SelectBehavior.Select }
+local cmp_mappings = lsp.defaults.cmp_mappings({
+    ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
+    ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
+    ['<C-y>'] = cmp.mapping.confirm({ select = true }),
+    ["<C-Space>"] = cmp.mapping.complete(),
+})
 
 lsp.setup_nvim_cmp({
-    mapping = cmp.mapping.preset.insert({
-        ['<C-d>'] = cmp.mapping.scroll_docs( -4),
-        ['<C-f>'] = cmp.mapping.scroll_docs(4),
-        ['<C-Space>'] = cmp.mapping.complete(),
-        ['<C-e>'] = cmp.mapping.close(),
-        ['<CR>'] = cmp.mapping.confirm({
-            behavior = cmp.ConfirmBehavior.Replace,
-            select = true
-        }),
-    }),
+    mapping = cmp_mappings,
     formatting = {
         format = function(entry, vim_item)
             vim_item.kind = lspkind.presets.default[vim_item.kind]
@@ -89,33 +98,5 @@ vim.diagnostic.config({
         prefix = '',
     },
 })
-
-local saga = require('lspsaga')
-saga.setup({
-    symbol_in_winbar = {
-        enable = true,
-        separator = ' ',
-        hide_keyword = true,
-        show_file = true,
-        folder_level = 2,
-    },
-    diagnostic = {
-        on_insert = false,
-    },
-    ui = {
-        theme = 'round',
-        border = 'single',
-    },
-})
-
-local opts = { noremap = true, silent = true }
-vim.keymap.set('n', '<leader>)', '<Cmd>Lspsaga diagnostic_jump_next<CR>', opts)
-vim.keymap.set('n', '<leader>(', '<Cmd>Lspsaga diagnostic_jump_prev<CR>', opts)
-vim.keymap.set('n', 'gh', '<Cmd>Lspsaga hover_doc<CR>', opts)
-vim.keymap.set('n', 'gf', '<Cmd>Lspsaga lsp_finder<CR>', opts)
-vim.keymap.set('n', 'gp', '<Cmd>Lspsaga peek_definition<CR>', opts)
-vim.keymap.set('n', '<leader>rn', '<Cmd>Lspsaga rename<CR>', opts)
-vim.keymap.set('n', '<leader>ca', '<Cmd>Lspsaga code_action<CR>', opts)
-vim.keymap.set('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
 
 vim.cmd [[highlight! default link CmpItemKind CmpItemMenuDefault]]

@@ -49,15 +49,6 @@ return require('packer').startup(function(use)
         }
     }
 
-    use({
-        "glepnir/lspsaga.nvim",
-        branch = "main",
-        requires = {
-            { "nvim-tree/nvim-web-devicons" },
-            { "nvim-treesitter/nvim-treesitter" },
-        }
-    })
-
     use {
         'nvim-tree/nvim-tree.lua',
         requires = {
