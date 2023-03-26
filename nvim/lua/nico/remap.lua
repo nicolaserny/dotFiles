@@ -54,7 +54,7 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
 vim.keymap.set("n", "<leader>ss", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>")
 vim.keymap.set("n", "<leader>sr",
-    ":cdo s/\\<<C-r><C-w>\\>/<C-r><C-w>/ | update<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>")
+    ":cdo s/<C-r><C-w>/<C-r><C-w>/g | update<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>")
 
 vim.keymap.set("n", "<leader>f", function()
     vim.lsp.buf.format()
