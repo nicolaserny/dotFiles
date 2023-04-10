@@ -107,4 +107,8 @@ return require('packer').startup(function(use)
     use('mbbill/undotree')
     use('jose-elias-alvarez/null-ls.nvim')
     use('github/copilot.vim')
+
+    use 'mfussenegger/nvim-dap'
+    use { "theHamsta/nvim-dap-virtual-text", requires = { "mfussenegger/nvim-dap" } }
+    use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } }
 end)
