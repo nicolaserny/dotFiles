@@ -16,7 +16,6 @@ dap.listeners.before.event_exited["dapui_config"] = function()
     dapui.close({})
 end
 
--- todo mason ensure installed + remove dap adapter from packer + reload load load_launchjs shortcut
 dap.adapters["pwa-node"] = {
     type = "server",
     host = "localhost",
@@ -62,6 +61,30 @@ for _, language in ipairs { 'typescript', 'javascript' } do
     }
 end
 
+-- I have to compile netcoredbg from source to get it to work with apple silicon
+dap.adapters.coreclr = {
+    type = 'executable',
+    command = '/usr/local/netcoredbg',
+    args = { '--interpreter=vscode' }
+}
+
+dap.configurations.cs = {
+    {
+        type = "coreclr",
+        name = "launch - netcoredbg",
+        request = "launch",
+        program = function()
+            return vim.fn.input('Path to dll', vim.fn.getcwd() .. '/bin/Debug/', 'file')
+        end,
+    },
+    {
+        type = 'coreclr',
+        request = 'attach',
+        name = 'Attach',
+        processId = require('dap.utils').pick_process,
+    },
+}
+
 local function load_launchjs()
     require('dap.ext.vscode').load_launchjs(nil, { ['pwa-node'] = { 'javascript', 'typescript' } })
 end
@@ -73,6 +96,6 @@ vim.api.nvim_set_keymap('n', '<leader>do', ':lua require("dap").step_over()<CR>'
 vim.api.nvim_set_keymap('n', '<leader>di', ':lua require("dap").step_into()<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>du', ':lua require("dap").step_out()<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>dx', ':lua require("dap").clear_breakpoints()<CR>',
-{ noremap = true, silent = true })
+    { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>db', dap.toggle_breakpoint, { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>dr', load_launchjs, { noremap = true, silent = true })
