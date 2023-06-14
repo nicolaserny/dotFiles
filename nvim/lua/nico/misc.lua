@@ -28,7 +28,7 @@ vim.cmd([[augroup END]])
 
 vim.keymap.set('n', '<leader>es', ':EslintFixAll<CR>')
 vim.keymap.set('n', '<leader>ess', ':silent exec "!yarn eslint --fix %"<CR> | redraw')
-vim.keymap.set('n', 'cp', ':let @" = expand("%:p")<cr>')
+vim.keymap.set('n', 'cp', ':let @* = expand("%:p")<cr>')
 
 -- Close all other buffers
 vim.keymap.set('n', '<leader>o', ':%bd|e#<cr>')
