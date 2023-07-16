@@ -87,8 +87,23 @@ local on_attach = function(client, bufnr)
         }
     end
     -- Use prettier for formatting
-    if client.name == "tsserver" then
-        client.server_capabilities.documentFormattingProvider = false
+    local filetype = vim.api.nvim_buf_get_option(bufnr, 'filetype')
+    local filetypes = {
+        ['javascript'] = true,
+        ['javascriptreact'] = true,
+        ['typescript'] = true,
+        ['typescriptreact'] = true,
+        ['vue'] = true,
+        ['json'] = true,
+        ['css'] = true,
+        ['html'] = true,
+        ['markdown'] = true,
+    }
+    if filetypes[filetype] then
+        vim.api.nvim_command [[augroup Format]]
+        vim.api.nvim_command [[autocmd! * <buffer>]]
+        vim.api.nvim_command [[autocmd BufWritePost <buffer> FormatWrite]]
+        vim.api.nvim_command [[augroup END]]
     else
         if client.server_capabilities.documentFormattingProvider then
             vim.api.nvim_command [[augroup Format]]
@@ -110,14 +125,39 @@ local on_attach = function(client, bufnr)
 end
 lsp.on_attach(on_attach);
 
-local null_ls = require("null-ls")
+local util = require "formatter.util"
 
-null_ls.setup({
-    sources = {
-        null_ls.builtins.formatting.prettier,
-    },
-    on_attach = on_attach,
-})
+require("formatter").setup {
+    filetype = {
+        javascript = {
+            require("formatter.filetypes.javascript").prettier,
+        },
+        javascriptreact = {
+            require("formatter.filetypes.javascript").prettier,
+        },
+        typescript = {
+            require("formatter.filetypes.typescript").prettier,
+        },
+        typescriptreact = {
+            require("formatter.filetypes.typescript").prettier,
+        },
+        vue = {
+            require("formatter.filetypes.vue").prettier,
+        },
+        json = {
+            require("formatter.filetypes.json").prettier,
+        },
+        css = {
+            require("formatter.filetypes.css").prettier,
+        },
+        html = {
+            require("formatter.filetypes.html").prettier,
+        },
+        markdown = {
+            require("formatter.filetypes.markdown").prettier,
+        },
+    }
+}
 
 lsp.configure('lua_ls', {
     settings = {

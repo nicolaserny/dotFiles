@@ -105,7 +105,7 @@ return require('packer').startup(function(use)
     use('folke/zen-mode.nvim')
     use('theprimeagen/harpoon')
     use('mbbill/undotree')
-    use('jose-elias-alvarez/null-ls.nvim')
+    use { 'mhartington/formatter.nvim' }
     use('github/copilot.vim')
 
     use 'mfussenegger/nvim-dap'
