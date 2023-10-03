@@ -35,6 +35,8 @@ for _, language in ipairs { 'typescript', 'javascript' } do
             name = 'Launch file',
             program = '${file}',
             cwd = '${workspaceFolder}',
+            outputCapture = "std",
+            trace = true
         },
         {
             type = 'pwa-node',
