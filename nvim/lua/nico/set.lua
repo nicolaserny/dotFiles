@@ -1,6 +1,13 @@
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
+local home
+if vim.fn.has("win32") == 1 then
+    home = os.getenv("USERPROFILE")
+else
+    home = os.getenv("HOME")
+end
+
 vim.opt.shortmess = "ac"
 vim.opt.preserveindent = true
 vim.opt.relativenumber = true
@@ -15,15 +22,15 @@ vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 vim.opt.backup = false
 vim.opt.swapfile = false
-vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
+vim.opt.undodir = home .. "/.vim/undodir"
 vim.opt.undofile = true
 vim.opt.wrap = false
 vim.opt.ruler = true
 vim.opt.history = 200
 vim.opt.smartindent = true
-vim.opt.showcmd = true -- display incomplete commands
-vim.opt.wildmenu = true -- display completion matches in a status line
-vim.opt.ttimeout = true -- time out for key codes
+vim.opt.showcmd = true    -- display incomplete commands
+vim.opt.wildmenu = true   -- display completion matches in a status line
+vim.opt.ttimeout = true   -- time out for key codes
 vim.opt.ttimeoutlen = 100 -- wait up to 100ms after Esc for special key
 vim.opt.scrolloff = 5
 vim.opt.autoread = true
