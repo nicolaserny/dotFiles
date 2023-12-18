@@ -1,11 +1,4 @@
-local lsp = require("lsp-zero")
-
-lsp.preset("recommended")
-
-lsp.ensure_installed({
-    "cssls", "dockerls", "eslint", "html", "tailwindcss",
-    "terraformls", "tsserver", "vimls", "vuels", "lua_ls",
-})
+local lsp_zero = require("lsp-zero")
 
 local on_attach = function(client, bufnr)
     local opts = { buffer = bufnr, remap = false }
@@ -123,9 +116,28 @@ local on_attach = function(client, bufnr)
     vim.keymap.set("n", "<leader>rn", function() vim.lsp.buf.rename() end, opts)
     vim.keymap.set("i", "<C-v>", function() vim.lsp.buf.signature_help() end, opts)
 end
-lsp.on_attach(on_attach);
+lsp_zero.on_attach(on_attach);
 
-local util = require "formatter.util"
+require('mason').setup({})
+require('mason-lspconfig').setup({
+    ensure_installed = { "cssls", "dockerls", "eslint", "html", "tailwindcss",
+        "terraformls", "tsserver", "vimls", "vuels", "lua_ls",
+    },
+    handlers = {
+        lsp_zero.default_setup,
+        lua_ls = function()
+            local lua_opts = lsp_zero.nvim_lua_ls()
+            lua_opts.settings = {
+                Lua = {
+                    diagnostics = {
+                        globals = { 'vim' } -- Recognize 'vim' global
+                    },
+                },
+            }
+            require('lspconfig').lua_ls.setup(lua_opts)
+        end,
+    }
+})
 
 require("formatter").setup {
     filetype = {
@@ -159,18 +171,6 @@ require("formatter").setup {
     }
 }
 
-lsp.configure('lua_ls', {
-    settings = {
-        Lua = {
-            diagnostics = {
-                -- Get the language server to recognize the `vim` global
-                globals = { 'vim' },
-            },
-        },
-    },
-}
-)
-
 local cmp = require 'cmp'
 local lspkind = require 'lspkind'
 local source_mapping = {
@@ -179,17 +179,8 @@ local source_mapping = {
     luasnip = "[Snip]",
 }
 local cmp_select = { behavior = cmp.SelectBehavior.Select }
-local cmp_mappings = lsp.defaults.cmp_mappings({
-    ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-    ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-    ['<CR>'] = cmp.mapping.confirm({ select = true }),
-    ["<C-Space>"] = cmp.mapping.complete(),
-    ['<Tab>'] = vim.NIL,
-    ['<S-Tab>'] = vim.NIL,
-})
 
-lsp.setup_nvim_cmp({
-    mapping = cmp_mappings,
+cmp.setup({
     formatting = {
         format = function(entry, vim_item)
             vim_item.kind = lspkind.presets.default[vim_item.kind]
@@ -198,9 +189,18 @@ lsp.setup_nvim_cmp({
             return vim_item
         end
     },
+    mapping = cmp.mapping.preset.insert({
+        ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
+        ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
+        ['<CR>'] = cmp.mapping.confirm({ select = true }),
+        ["<C-Space>"] = cmp.mapping.complete(),
+        ['<Tab>'] = vim.NIL,
+        ['<S-Tab>'] = vim.NIL,
+        -- scroll up and down the documentation window
+        ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-d>'] = cmp.mapping.scroll_docs(4),
+    }),
 })
-
-lsp.setup()
 
 vim.diagnostic.config({
     virtual_text = true,
