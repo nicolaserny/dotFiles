@@ -121,7 +121,7 @@ lsp_zero.on_attach(on_attach);
 require('mason').setup({})
 require('mason-lspconfig').setup({
     ensure_installed = { "cssls", "dockerls", "eslint", "html", "tailwindcss",
-        "terraformls", "tsserver", "vimls", "vuels", "lua_ls",
+        "terraformls", "tsserver", "vimls",
     },
     handlers = {
         lsp_zero.default_setup,
