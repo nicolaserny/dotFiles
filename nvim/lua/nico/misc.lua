@@ -27,7 +27,7 @@ vim.cmd([[autocmd FileType markdown setlocal wrap textwidth=0 colorcolumn=0 spel
 vim.cmd([[augroup END]])
 
 vim.keymap.set('n', '<leader>es', ':EslintFixAll<CR>')
-vim.keymap.set('n', '<leader>ess', ':silent exec "!yarn eslint --fix %"<CR> | redraw')
+vim.keymap.set('n', '<leader>ess', ':silent exec "!npm run lint --fix %"<CR> | redraw')
 vim.keymap.set('n', 'cp', ':let @* = expand("%:p")<cr>')
 
 -- Close all other buffers
