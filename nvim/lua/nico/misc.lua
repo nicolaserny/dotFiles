@@ -32,3 +32,6 @@ vim.keymap.set('n', 'cp', ':let @* = expand("%:p")<cr>')
 
 -- Close all other buffers
 vim.keymap.set('n', '<leader>o', ':%bd|e#<cr>')
+
+-- Display the path of the current buffer
+vim.api.nvim_set_keymap('n', '<leader>w', ':echo expand("%:p")<cr>', { noremap = true, silent = true })
