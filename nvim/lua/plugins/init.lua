@@ -8,7 +8,7 @@ return {
 
     {
         'nvim-telescope/telescope.nvim',
-        version = '0.1.4',
+        version = '0.1.x',
         dependencies = { { 'nvim-lua/plenary.nvim' }, { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' } }
     },
 
@@ -94,5 +94,5 @@ return {
 
     'mfussenegger/nvim-dap',
     { "theHamsta/nvim-dap-virtual-text", dependencies = { "mfussenegger/nvim-dap" } },
-    { "rcarriga/nvim-dap-ui",            dependencies = { "mfussenegger/nvim-dap",  "nvim-neotest/nvim-nio" } },
+    { "rcarriga/nvim-dap-ui",            dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" } },
 }
