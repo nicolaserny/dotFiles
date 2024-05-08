@@ -33,10 +33,9 @@ vim.keymap.set('i', '<C-k>', '<C-\\><C-N><C-w>k')
 vim.keymap.set('i', '<C-l>', '<C-\\><C-N><C-w>l')
 -- increment/decrement numbers
 -- g<C-a> to increment a list of numbers
-vim.keymap.set('n', '+', '<C-a>')
-vim.keymap.set('n', '-', '<C-x>')
-vim.keymap.set('v', '+', 'g<C-a>')
-vim.keymap.set('v', '-', 'g<C-x>')
+vim.keymap.set('n', '<C-i>', '<C-a>')
+vim.keymap.set('v', '<C-i>', 'g<C-a>')
+vim.keymap.set('v', '<C-x>', 'g<C-x>')
 vim.keymap.set('n', '<C-d>', '<C-d>zz')
 vim.keymap.set('n', '<C-u>', '<C-u>zz')
 vim.keymap.set('n', 'n', 'nzzzv')
