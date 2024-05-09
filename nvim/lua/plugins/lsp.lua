@@ -3,28 +3,23 @@ return {
     branch = 'v3.x',
     dependencies = {
         -- LSP Support
-        { 'neovim/nvim-lspconfig' },
-        { 'williamboman/mason.nvim' },
-        { 'williamboman/mason-lspconfig.nvim' },
+        'neovim/nvim-lspconfig',
+        'williamboman/mason.nvim',
+        'williamboman/mason-lspconfig.nvim',
 
         -- Autocompletion
-        { 'hrsh7th/nvim-cmp' },
-        { 'hrsh7th/cmp-buffer' },
-        { 'hrsh7th/cmp-path' },
-        { 'saadparwaiz1/cmp_luasnip' },
-        { 'hrsh7th/cmp-nvim-lsp' },
-        { 'hrsh7th/cmp-nvim-lua' },
+        'hrsh7th/nvim-cmp',
+        'hrsh7th/cmp-buffer',
+        'hrsh7th/cmp-path',
+        'saadparwaiz1/cmp_luasnip',
+        'hrsh7th/cmp-nvim-lsp',
+        'hrsh7th/cmp-nvim-lua',
 
         -- Snippets
-        {
-            "L3MON4D3/LuaSnip",
-            version = "v2.*",
-            build = "make install_jsregexp"
-        },
-        { 'rafamadriz/friendly-snippets' },
+        "L3MON4D3/LuaSnip",
 
         -- Misc
-        { 'onsails/lspkind-nvim' },
+        'onsails/lspkind-nvim',
 
         'j-hui/fidget.nvim',
         'mhartington/formatter.nvim'
@@ -207,13 +202,18 @@ return {
         local cmp = require 'cmp'
         local lspkind = require 'lspkind'
         local source_mapping = {
-            buffer = "[Buffer]",
             nvim_lsp = "[LSP]",
             luasnip = "[Snip]",
+            buffer = "[Buffer]",
         }
         local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
         cmp.setup({
+            snippet = {
+                expand = function(args)
+                    require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+                end,
+            },
             formatting = {
                 format = function(entry, vim_item)
                     vim_item.kind = lspkind.presets.default[vim_item.kind]
@@ -233,6 +233,12 @@ return {
                 ['<C-u>'] = cmp.mapping.scroll_docs(-4),
                 ['<C-d>'] = cmp.mapping.scroll_docs(4),
             }),
+            sources = cmp.config.sources({
+                { name = 'nvim_lsp' },
+                { name = 'luasnip' }, -- For luasnip users.
+            }, {
+                { name = 'buffer' },
+            })
         })
 
         vim.diagnostic.config({

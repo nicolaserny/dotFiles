@@ -39,6 +39,3 @@ vim.keymap.set('n', '<leader>o', ':%bd|e#<cr>')
 
 -- Display the path of the current buffer
 vim.api.nvim_set_keymap('n', '<leader>w', ':echo expand("%:p")<cr>', { noremap = true, silent = true })
-
--- Snippets
-vim.api.nvim_set_keymap('n', '<Leader>zs', 'i${({theme}) => ', { noremap = true, silent = true })
