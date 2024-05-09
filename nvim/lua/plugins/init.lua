@@ -42,6 +42,8 @@ return {
 
             -- Misc
             { 'onsails/lspkind-nvim' },
+
+            'j-hui/fidget.nvim',
         }
     },
 

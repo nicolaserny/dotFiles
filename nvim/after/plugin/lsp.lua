@@ -118,6 +118,7 @@ local on_attach = function(client, bufnr)
 end
 lsp_zero.on_attach(on_attach);
 
+require("fidget").setup({})
 require('mason').setup({})
 require('mason-lspconfig').setup({
     ensure_installed = { "cssls", "dockerls", "eslint", "html", "tailwindcss",
