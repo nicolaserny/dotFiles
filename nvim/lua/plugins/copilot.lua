@@ -5,4 +5,6 @@ if vim.g.location == 'home' then
             vim.g.copilot_filetypes = { markdown = true }
         end
     }
+else
+    return { 'TabbyML/vim-tabby' }
 end
