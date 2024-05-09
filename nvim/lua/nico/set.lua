@@ -1,3 +1,4 @@
+vim.g.location = vim.env.NEOVIM_LOCATION or 'home'
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 

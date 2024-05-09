@@ -10,6 +10,15 @@ return {
         'nvim-tree/nvim-web-devicons',
     },
     config = function()
-        require("nvim-tree").setup()
+        if vim.g.location == 'home' then
+            require("nvim-tree").setup()
+        else
+            require("nvim-tree").setup({
+                view = {
+                    width = 40,
+                    side = "left",
+                }
+            })
+        end
     end
 }

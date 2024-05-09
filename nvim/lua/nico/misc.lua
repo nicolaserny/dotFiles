@@ -27,7 +27,11 @@ vim.cmd([[autocmd FileType markdown setlocal wrap textwidth=0 colorcolumn=0 spel
 vim.cmd([[augroup END]])
 
 vim.keymap.set('n', '<leader>es', ':EslintFixAll<CR>')
-vim.keymap.set('n', '<leader>ess', ':silent exec "!yarn eslint --fix %"<CR> | redraw')
+if vim.g.location == 'home' then
+    vim.keymap.set('n', '<leader>ess', ':silent exec "!yarn eslint --fix %"<CR> | redraw')
+else
+    vim.keymap.set('n', '<leader>ess', ':silent exec "!npm run lint --fix %"<CR> | redraw')
+end
 vim.keymap.set('n', 'cp', ':let @* = expand("%:p")<cr>')
 
 -- Close all other buffers
@@ -35,3 +39,6 @@ vim.keymap.set('n', '<leader>o', ':%bd|e#<cr>')
 
 -- Display the path of the current buffer
 vim.api.nvim_set_keymap('n', '<leader>w', ':echo expand("%:p")<cr>', { noremap = true, silent = true })
+
+-- Snippets
+vim.api.nvim_set_keymap('n', '<Leader>zs', 'i${({theme}) => ', { noremap = true, silent = true })

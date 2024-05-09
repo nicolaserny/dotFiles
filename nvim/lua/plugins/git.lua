@@ -45,6 +45,11 @@ return {
         vim.api.nvim_create_user_command('Gitg', 'Git log --graph --decorate --oneline --all', { nargs = 0 })
         vim.keymap.set('n', '<leader>gf', ':Git fetch --all --prune<CR>')
         vim.keymap.set('n', '<leader>ga', ':Git add -A<CR>')
-        vim.keymap.set("n", "<leader>gs", vim.cmd.Git);
+        vim.keymap.set("n", "<leader>gs", vim.cmd.Git)
+
+        vim.cmd [[
+            command! NpmCommit !tmux send-keys -t 2 'npm run commit' C-m \; select-window -t 2
+        ]]
+        vim.api.nvim_set_keymap('n', '<leader>cc', ':NpmCommit<CR>', { noremap = true, silent = true })
     end
 }

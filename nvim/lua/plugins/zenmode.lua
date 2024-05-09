@@ -3,7 +3,7 @@ return {
     config = function()
         require("zen-mode").setup {
             window = {
-                width = 110,
+                width = vim.g.location == 'home' and 110 or 130,
                 options = {
                     number = true,
                     relativenumber = true,
