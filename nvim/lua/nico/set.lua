@@ -39,7 +39,6 @@ vim.opt.autowrite = true
 vim.opt.signcolumn = "yes"
 vim.opt.hidden = true
 vim.opt.bg = "dark"
-vim.opt.pastetoggle = "<F2>"
 vim.opt.belloff = "all"
 vim.opt.completeopt = { 'menuone', 'noinsert', 'noselect' }
 vim.opt.previewheight = 5
