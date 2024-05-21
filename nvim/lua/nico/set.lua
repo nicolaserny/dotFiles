@@ -57,3 +57,7 @@ vim.opt.termguicolors = true
 -- statusline
 vim.opt.laststatus = 2
 vim.opt.showtabline = 0
+
+vim.api.nvim_exec([[
+  autocmd BufNewFile,BufRead *.m set filetype=objcpp
+]], false)
