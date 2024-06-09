@@ -4,18 +4,18 @@ return {
     dependencies = { 'nvim-lua/plenary.nvim', { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' }, "folke/trouble.nvim" },
     config = function()
         local actions = require "telescope.actions"
-        local trouble = require("trouble.providers.telescope")
+        local trouble = require("trouble.sources.telescope")
 
         require('telescope').setup {
             defaults = {
                 mappings = {
                     i = {
                         ["<C-s>"] = actions.send_selected_to_qflist + actions.open_qflist,
-                        ["<c-t>"] = trouble.open_with_trouble,
+                        ["<c-t>"] = trouble.open,
                     },
                     n = {
                         ["<C-s>"] = actions.send_selected_to_qflist + actions.open_qflist,
-                        ["<c-t>"] = trouble.open_with_trouble,
+                        ["<c-t>"] = trouble.open,
                     }
                 },
                 file_ignore_patterns = {
