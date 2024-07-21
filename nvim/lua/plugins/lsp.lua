@@ -164,6 +164,17 @@ return {
                     }
                     require('lspconfig').lua_ls.setup(lua_opts)
                 end,
+                eslint = function()
+                    require('lspconfig').eslint.setup({
+                        capabilities = lsp_zero.capabilities,
+                        settings = {
+                            workingDirectories = { mode = "auto" },
+                            experimental = {
+                                useFlatConfig = false,
+                            }
+                        },
+                    })
+                end,
             }
         })
 

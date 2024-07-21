@@ -19,7 +19,7 @@ return {
             local themeSnippet = s("snTheme", {
                 t("${({theme}) =>"),
                 i(1, "ThemeExpression"),
-                t(" });"),
+                t(" };"),
             });
 
             ls.add_snippets("typescriptreact", {
