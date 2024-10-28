@@ -6,5 +6,5 @@ if vim.g.location == 'home' then
         end
     }
 else
-    return { 'TabbyML/vim-tabby' }
+    return { 'TabbyML/vim-tabby', version = '1.4.0' }
 end
