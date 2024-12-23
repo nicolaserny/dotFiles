@@ -1,9 +1,7 @@
 return {
-    'VonHeikemen/lsp-zero.nvim',
-    branch = 'v3.x',
+    'neovim/nvim-lspconfig',
     dependencies = {
         -- LSP Support
-        'neovim/nvim-lspconfig',
         'williamboman/mason.nvim',
         'williamboman/mason-lspconfig.nvim',
 
@@ -25,8 +23,6 @@ return {
         'mhartington/formatter.nvim'
     },
     config = function()
-        local lsp_zero = require("lsp-zero")
-
         local on_attach = function(client, bufnr)
             local opts = { buffer = bufnr, remap = false }
             -- fix omnisharp bug Invalid character in group name.
@@ -143,7 +139,15 @@ return {
             vim.keymap.set("n", "<leader>rn", function() vim.lsp.buf.rename() end, opts)
             vim.keymap.set("i", "<C-v>", function() vim.lsp.buf.signature_help() end, opts)
         end
-        lsp_zero.on_attach(on_attach);
+
+        local cmp = require('cmp')
+        local cmp_lsp = require("cmp_nvim_lsp")
+
+        local capabilities = vim.tbl_deep_extend(
+            "force",
+            {},
+            vim.lsp.protocol.make_client_capabilities(),
+            cmp_lsp.default_capabilities())
 
         require("fidget").setup({})
         require('mason').setup({})
@@ -152,21 +156,29 @@ return {
                 "terraformls", "ts_ls", "vimls", "lua_ls",
             },
             handlers = {
-                lsp_zero.default_setup,
-                lua_ls = function()
-                    local lua_opts = lsp_zero.nvim_lua_ls()
-                    lua_opts.settings = {
-                        Lua = {
-                            diagnostics = {
-                                globals = { 'vim' } -- Recognize 'vim' global
-                            },
-                        },
+                function(server_name) -- default handler (optional)
+                    require("lspconfig")[server_name].setup {
+                        capabilities = capabilities,
+                        on_attach = on_attach
                     }
-                    require('lspconfig').lua_ls.setup(lua_opts)
+                end,
+                lua_ls = function()
+                    local lspconfig = require("lspconfig")
+                    lspconfig.lua_ls.setup {
+                        capabilities = capabilities,
+                        settings = {
+                            Lua = {
+                                runtime = { version = "Lua 5.1" },
+                                diagnostics = {
+                                    globals = { "bit", "vim", "it", "describe", "before_each", "after_each" },
+                                }
+                            }
+                        }
+                    }
                 end,
                 eslint = function()
                     require('lspconfig').eslint.setup({
-                        capabilities = lsp_zero.capabilities,
+                        capabilities = capabilities,
                         settings = {
                             workingDirectories = { mode = "auto" },
                             experimental = {
@@ -210,7 +222,6 @@ return {
             }
         }
 
-        local cmp = require 'cmp'
         local lspkind = require 'lspkind'
         local source_mapping = {
             nvim_lsp = "[LSP]",
