@@ -162,7 +162,7 @@ return {
                         on_attach = on_attach
                     }
                 end,
-                lua_ls = function()
+                ["lua_ls"] = function()
                     local lspconfig = require("lspconfig")
                     lspconfig.lua_ls.setup {
                         capabilities = capabilities,
