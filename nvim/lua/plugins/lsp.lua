@@ -1,6 +1,8 @@
 return {
     'neovim/nvim-lspconfig',
     dependencies = {
+        'stevearc/conform.nvim',
+
         -- LSP Support
         'williamboman/mason.nvim',
         'williamboman/mason-lspconfig.nvim',
@@ -20,7 +22,6 @@ return {
         'onsails/lspkind-nvim',
 
         'j-hui/fidget.nvim',
-        'mhartington/formatter.nvim'
     },
     config = function()
         local on_attach = function(client, bufnr)
@@ -102,32 +103,7 @@ return {
                     range = true,
                 }
             end
-            -- Use prettier for formatting
-            local filetype = vim.api.nvim_buf_get_option(bufnr, 'filetype')
-            local filetypes = {
-                ['javascript'] = true,
-                ['javascriptreact'] = true,
-                ['typescript'] = true,
-                ['typescriptreact'] = true,
-                ['vue'] = true,
-                ['json'] = true,
-                ['css'] = true,
-                ['html'] = true,
-                ['markdown'] = true,
-            }
-            if filetypes[filetype] then
-                vim.api.nvim_command [[augroup Format]]
-                vim.api.nvim_command [[autocmd! * <buffer>]]
-                vim.api.nvim_command [[autocmd BufWritePost <buffer> FormatWrite]]
-                vim.api.nvim_command [[augroup END]]
-            else
-                if client.server_capabilities.documentFormattingProvider then
-                    vim.api.nvim_command [[augroup Format]]
-                    vim.api.nvim_command [[autocmd! * <buffer>]]
-                    vim.api.nvim_command [[autocmd BufWritePre <buffer> lua vim.lsp.buf.format()]]
-                    vim.api.nvim_command [[augroup END]]
-                end
-            end
+
             vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
             vim.keymap.set("n", "gh", function() vim.lsp.buf.hover() end, opts)
             vim.keymap.set("n", "<leader>vs", function() vim.lsp.buf.workspace_symbol() end, opts)
@@ -139,6 +115,23 @@ return {
             vim.keymap.set("n", "<leader>rn", function() vim.lsp.buf.rename() end, opts)
             vim.keymap.set("i", "<C-v>", function() vim.lsp.buf.signature_help() end, opts)
         end
+
+        require("conform").setup({
+            formatters_by_ft = {
+                javascript = { "prettier", lsp_format = "fallback" },
+                javascriptreact = { "prettier", lsp_format = "fallback" },
+                typescript = { "prettier", lsp_format = "fallback" },
+                typescriptreact = { "prettier", lsp_format = "fallback" },
+                vue = { "prettier", lsp_format = "fallback" },
+                json = { "prettier", lsp_format = "fallback" },
+                css = { "prettier", lsp_format = "fallback" },
+                html = { "prettier", lsp_format = "fallback" },
+                markdown = { "prettier", lsp_format = "fallback" },
+            },
+            format_on_save = {
+                lsp_format = "fallback",
+            },
+        })
 
         local cmp = require('cmp')
         local cmp_lsp = require("cmp_nvim_lsp")
@@ -189,38 +182,6 @@ return {
                 end,
             }
         })
-
-        require("formatter").setup {
-            filetype = {
-                javascript = {
-                    require("formatter.filetypes.javascript").prettier,
-                },
-                javascriptreact = {
-                    require("formatter.filetypes.javascript").prettier,
-                },
-                typescript = {
-                    require("formatter.filetypes.typescript").prettier,
-                },
-                typescriptreact = {
-                    require("formatter.filetypes.typescript").prettier,
-                },
-                vue = {
-                    require("formatter.filetypes.vue").prettier,
-                },
-                json = {
-                    require("formatter.filetypes.json").prettier,
-                },
-                css = {
-                    require("formatter.filetypes.css").prettier,
-                },
-                html = {
-                    require("formatter.filetypes.html").prettier,
-                },
-                markdown = {
-                    require("formatter.filetypes.markdown").prettier,
-                },
-            }
-        }
 
         local lspkind = require 'lspkind'
         local source_mapping = {
