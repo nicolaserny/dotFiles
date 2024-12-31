@@ -22,6 +22,8 @@ return {
         'onsails/lspkind-nvim',
 
         'j-hui/fidget.nvim',
+
+        'nvim-java/nvim-java',
     },
     config = function()
         require("conform").setup({
@@ -93,6 +95,9 @@ return {
                             }
                         }
                     }
+                end,
+                jdtls = function()
+                    require('lspconfig').jdtls.setup({})
                 end,
                 eslint = function()
                     require('lspconfig').eslint.setup({
