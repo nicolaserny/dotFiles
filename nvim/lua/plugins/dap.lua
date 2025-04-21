@@ -72,30 +72,6 @@ return {
                 }
             end
 
-            -- I have to compile netcoredbg from source to get it to work with apple silicon
-            dap.adapters.coreclr = {
-                type = 'executable',
-                command = '/usr/local/netcoredbg',
-                args = { '--interpreter=vscode' }
-            }
-
-            dap.configurations.cs = {
-                {
-                    type = "coreclr",
-                    name = "launch - netcoredbg",
-                    request = "launch",
-                    program = function()
-                        return vim.fn.input('Path to dll', vim.fn.getcwd() .. '/bin/Debug/', 'file')
-                    end,
-                },
-                {
-                    type = 'coreclr',
-                    request = 'attach',
-                    name = 'Attach',
-                    processId = require('dap.utils').pick_process,
-                },
-            }
-
             local function load_launchjs()
                 require('dap.ext.vscode').load_launchjs(nil, { ['pwa-node'] = { 'javascript', 'typescript' } })
             end
