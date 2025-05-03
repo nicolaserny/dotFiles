@@ -98,14 +98,13 @@ local function get_home_config()
     avante_opts.auto_suggestions_provider = nil
     avante_opts.claude = {
         endpoint = "https://api.anthropic.com",
-        model = "claude-3-7-sonnet-20250219",
+        model = "claude-3-5-sonnet-20241022",
         timeout = 30000,
         temperature = 0,
         max_tokens = 4096,
     }
     avante_opts.behaviour = {
         auto_suggestions = false,
-        -- auto_apply_diff_after_generation = true,
         enable_claude_text_editor_tool_mode = true,
         use_cwd_as_project_root = true,
         enable_cursor_planning_mode = true,
