@@ -3,7 +3,11 @@
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
-    selected=$(find ~/Work/github ~/Work/gitlab ~/Work/bitbucket ~/Work/azuredevops ~/Work/workshops ~/Work/interviews ~/Work -mindepth 1 -maxdepth 1 -type d | fzf)
+    if [[ "$NEOVIM_LOCATION" == "home" ]]; then
+        selected=$(find ~/Work/github ~/Work/bitbucket ~/Work/azuredevops ~/Work/workshops ~/Work/interviews ~/Work -mindepth 1 -maxdepth 1 -type d | fzf)
+    else
+        selected=$(find ~/Work/github ~/Work/gitlab ~/Work/tmp ~/Work/workshops ~/Work -mindepth 1 -maxdepth 1 -type d | fzf)
+    fi
 fi
 
 if [[ -z $selected ]]; then
