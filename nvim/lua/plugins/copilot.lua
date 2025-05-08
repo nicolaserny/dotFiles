@@ -114,7 +114,7 @@ local function get_home_config()
         {
             'github/copilot.vim',
             config = function()
-                vim.g.copilot_filetypes = { markdown = true }
+                vim.g.copilot_filetypes = { markdown = true, Avante = false, AvanteInput = false }
             end
         },
         mcphub_config,
