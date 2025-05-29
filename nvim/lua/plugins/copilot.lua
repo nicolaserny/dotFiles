@@ -134,7 +134,7 @@ local function get_work_config()
     local avante_opts = get_avante_common_opts()
     avante_opts.provider = "bedrock" -- Need to install the lastest version of curl with brew
     avante_opts.bedrock = {
-        model = "anthropic.claude-3-5-sonnet-20240620-v1:0",
+        model = "us.anthropic.claude-sonnet-4-20250514-v1:0",
         timeout = 30000, -- Timeout in milliseconds
         temperature = 0,
         max_tokens = 20480,
