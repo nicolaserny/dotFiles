@@ -105,6 +105,7 @@ local function get_home_config()
     }
     avante_opts.behaviour = {
         auto_suggestions = false,
+        auto_apply_diff_after_generation = true,
         enable_claude_text_editor_tool_mode = true,
         use_cwd_as_project_root = true,
         enable_cursor_planning_mode = true,
@@ -137,9 +138,10 @@ local function get_work_config()
         model = "us.anthropic.claude-sonnet-4-20250514-v1:0",
         timeout = 30000, -- Timeout in milliseconds
         temperature = 0,
-        max_tokens = 20480,
+        max_tokens = 12288,
     }
     avante_opts.behaviour = {
+        auto_apply_diff_after_generation = true,
         enable_claude_text_editor_tool_mode = true,
         use_cwd_as_project_root = true,
         enable_cursor_planning_mode = true,
