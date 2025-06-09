@@ -1,11 +1,12 @@
 return {
     'neovim/nvim-lspconfig',
+    version = '1.x.x',
     dependencies = {
         'stevearc/conform.nvim',
 
         -- LSP Support
-        'williamboman/mason.nvim',
-        'williamboman/mason-lspconfig.nvim',
+        { 'williamboman/mason.nvim',           version = '1.x.x', },
+        { 'williamboman/mason-lspconfig.nvim', version = '1.x.x', },
 
         -- Autocompletion
         'hrsh7th/nvim-cmp',

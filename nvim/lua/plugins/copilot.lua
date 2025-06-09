@@ -59,6 +59,25 @@ local avante_dependencies = {
 -- Common configuration for avante.nvim
 local function get_avante_common_opts()
     return {
+        providers = {
+            claude = {
+                endpoint = "https://api.anthropic.com",
+                model = "claude-3-5-sonnet-20241022",
+                timeout = 30000,
+                extra_request_body = {
+                    max_tokens = 4096,
+                    temperature = 0,
+                },
+            },
+            bedrock = {
+                model = "us.anthropic.claude-sonnet-4-20250514-v1:0",
+                timeout = 30000,             -- Timeout in milliseconds
+                extra_request_body = {
+                    temperature = 0,
+                    max_tokens = 12288,
+                }
+            }
+        },
         disabled_tools = {
             "list_files", -- Built-in file operations
             "search_files",
@@ -96,13 +115,6 @@ local function get_home_config()
     local avante_opts = get_avante_common_opts()
     avante_opts.provider = "claude"
     avante_opts.auto_suggestions_provider = nil
-    avante_opts.claude = {
-        endpoint = "https://api.anthropic.com",
-        model = "claude-3-5-sonnet-20241022",
-        timeout = 30000,
-        temperature = 0,
-        max_tokens = 4096,
-    }
     avante_opts.behaviour = {
         auto_suggestions = false,
         auto_apply_diff_after_generation = true,
@@ -134,12 +146,6 @@ end
 local function get_work_config()
     local avante_opts = get_avante_common_opts()
     avante_opts.provider = "bedrock" -- Need to install the lastest version of curl with brew
-    avante_opts.bedrock = {
-        model = "us.anthropic.claude-sonnet-4-20250514-v1:0",
-        timeout = 30000, -- Timeout in milliseconds
-        temperature = 0,
-        max_tokens = 12288,
-    }
     avante_opts.behaviour = {
         auto_apply_diff_after_generation = true,
         enable_claude_text_editor_tool_mode = true,
