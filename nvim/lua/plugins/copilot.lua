@@ -71,7 +71,7 @@ local function get_avante_common_opts()
             },
             bedrock = {
                 model = "us.anthropic.claude-sonnet-4-20250514-v1:0",
-                timeout = 30000,             -- Timeout in milliseconds
+                timeout = 30000, -- Timeout in milliseconds
                 extra_request_body = {
                     temperature = 0,
                     max_tokens = 12288,
