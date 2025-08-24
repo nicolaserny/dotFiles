@@ -1,12 +1,11 @@
 return {
     'neovim/nvim-lspconfig',
-    version = '1.x.x',
     dependencies = {
         'stevearc/conform.nvim',
 
         -- LSP Support
-        { 'williamboman/mason.nvim',           version = '1.x.x', },
-        { 'williamboman/mason-lspconfig.nvim', version = '1.x.x', },
+        { 'mason-org/mason.nvim' },
+        { 'mason-org/mason-lspconfig.nvim' },
 
         -- Autocompletion
         'hrsh7th/nvim-cmp',
@@ -46,14 +45,16 @@ return {
             },
         })
 
-        local cmp = require('cmp')
-        local cmp_lsp = require("cmp_nvim_lsp")
+        -- Mason v2: Global LSP capabilities configuration
+        vim.lsp.config("*", {
+            capabilities = vim.tbl_deep_extend(
+                "force",
+                vim.lsp.protocol.make_client_capabilities(),
+                require("cmp_nvim_lsp").default_capabilities()
+            )
+        })
 
-        local capabilities = vim.tbl_deep_extend(
-            "force",
-            {},
-            vim.lsp.protocol.make_client_capabilities(),
-            cmp_lsp.default_capabilities())
+        local cmp = require('cmp')
 
         vim.api.nvim_create_autocmd('LspAttach', {
             desc = 'LSP actions',
@@ -79,44 +80,7 @@ return {
             ensure_installed = { "cssls", "dockerls", "eslint", "html", "tailwindcss",
                 "terraformls", "ts_ls", "vimls", "lua_ls", "kotlin_language_server"
             },
-            handlers = {
-                function(server_name) -- default handler (optional)
-                    require("lspconfig")[server_name].setup {
-                        capabilities = capabilities,
-                    }
-                end,
-                ["lua_ls"] = function()
-                    local lspconfig = require("lspconfig")
-                    lspconfig.lua_ls.setup {
-                        capabilities = capabilities,
-                        settings = {
-                            Lua = {
-                                runtime = { version = "Lua 5.1" },
-                                diagnostics = {
-                                    globals = { "bit", "vim", "it", "describe", "before_each", "after_each" },
-                                }
-                            }
-                        }
-                    }
-                end,
-                kotlin_language_server = function()
-                    require('lspconfig').kotlin_language_server.setup({ capabilities = capabilities })
-                end,
-                jdtls = function()
-                    require('lspconfig').jdtls.setup({})
-                end,
-                eslint = function()
-                    require('lspconfig').eslint.setup({
-                        capabilities = capabilities,
-                        settings = {
-                            workingDirectories = { mode = "auto" },
-                            experimental = {
-                                useFlatConfig = false,
-                            }
-                        },
-                    })
-                end,
-            }
+            automatic_enable = true,
         })
 
         local lspkind = require 'lspkind'
