@@ -26,7 +26,7 @@ vim.cmd([[
 vim.cmd([[autocmd FileType markdown setlocal wrap textwidth=0 colorcolumn=0 spell spelllang=fr,en]])
 vim.cmd([[augroup END]])
 
-vim.keymap.set('n', '<leader>es', ':EslintFixAll<CR>')
+vim.keymap.set('n', '<leader>es', ':LspEslintFixAll<CR>')
 if vim.g.location == 'home' then
     vim.keymap.set('n', '<leader>ess', ':silent exec "!yarn eslint --fix %"<CR> | redraw')
 else
