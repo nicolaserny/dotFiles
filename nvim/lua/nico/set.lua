@@ -60,5 +60,10 @@ vim.opt.showtabline = 0
 
 vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
     pattern = "*.m",
+    callback = function() vim.bo.filetype = "objc" end,
+})
+
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+    pattern = "*.mm",
     callback = function() vim.bo.filetype = "objcpp" end,
 })

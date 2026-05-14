@@ -30,6 +30,7 @@ return {
 			"markdown_inline",
 			"java",
 			"swift",
+			"objc",
 		})
 	end,
 }

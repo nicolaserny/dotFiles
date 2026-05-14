@@ -1,3 +1,3 @@
 return {
-    filetypes = { "swift" },
+    filetypes = { "swift", "objc", "objcpp" },
 }
