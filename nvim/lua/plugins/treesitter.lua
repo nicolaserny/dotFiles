@@ -21,7 +21,6 @@ return {
 			"vim",
 			"dockerfile",
 			"dot",
-			"scss",
 			"bash",
 			"c_sharp",
 			"vue",
@@ -29,6 +28,7 @@ return {
 			"markdown",
 			"markdown_inline",
 			"java",
+			"kotlin",
 			"swift",
 			"objc",
 		})
