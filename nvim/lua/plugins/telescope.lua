@@ -1,6 +1,12 @@
 return {
     'nvim-telescope/telescope.nvim',
     version = '0.1.x',
+    cmd = "Telescope",
+    keys = {
+        "<leader>ff", "<leader>fg", "<leader>fb", "<leader>fh",
+        "<leader>fk", "<leader>fc", "<leader>fp", "<leader>fw",
+        "<leader>fr", "<C-p>",
+    },
     dependencies = { 'nvim-lua/plenary.nvim', { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' }, "folke/trouble.nvim" },
     config = function()
         local actions = require "telescope.actions"

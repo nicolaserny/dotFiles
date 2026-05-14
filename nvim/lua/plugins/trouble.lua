@@ -1,5 +1,7 @@
 return {
     "folke/trouble.nvim",
+    cmd = "Trouble",
+    keys = { "<leader>xq", "<leader>xd" },
     dependencies = "nvim-tree/nvim-web-devicons",
     config = function()
         require("trouble").setup {}

@@ -9,7 +9,7 @@ else
     home = os.getenv("HOME")
 end
 
-vim.opt.shortmess = "ac"
+vim.opt.shortmess:append("ac")
 vim.opt.preserveindent = true
 vim.opt.relativenumber = true
 vim.opt.number = true
@@ -58,6 +58,7 @@ vim.opt.termguicolors = true
 vim.opt.laststatus = 3
 vim.opt.showtabline = 0
 
-vim.api.nvim_exec([[
-  autocmd BufNewFile,BufRead *.m set filetype=objcpp
-]], false)
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+    pattern = "*.m",
+    callback = function() vim.bo.filetype = "objcpp" end,
+})

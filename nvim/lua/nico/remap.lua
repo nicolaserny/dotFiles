@@ -60,4 +60,14 @@ vim.keymap.set("n", "<leader>f", function()
 end)
 vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
 
-vim.keymap.set("n", "<leader>lr", "<cmd>LspRestart<CR>")
+vim.keymap.set("n", "<leader>lr", function()
+    local clients = vim.lsp.get_clients({ bufnr = 0 })
+    if #clients == 0 then
+        vim.notify("No LSP clients attached", vim.log.levels.WARN)
+        return
+    end
+    for _, client in ipairs(clients) do
+        client:stop()
+    end
+    vim.defer_fn(vim.cmd.edit, 100)
+end)
