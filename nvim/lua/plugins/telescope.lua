@@ -1,6 +1,6 @@
 return {
     'nvim-telescope/telescope.nvim',
-    version = '0.1.x',
+    version = '0.2.x',
     cmd = "Telescope",
     keys = {
         "<leader>ff", "<leader>fg", "<leader>fb", "<leader>fh",
