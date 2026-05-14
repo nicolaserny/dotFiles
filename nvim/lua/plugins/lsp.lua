@@ -39,6 +39,7 @@ return {
                 markdown        = { "prettier", lsp_format = "fallback" },
                 java            = { "google-java-format", lsp_format = "fallback" },
                 kotlin          = { "ktlint", lsp_format = "fallback" },
+                swift           = { "swift", lsp_format = "fallback" },
             },
             format_on_save = {
                 lsp_format = "fallback",
@@ -82,6 +83,9 @@ return {
             },
             automatic_enable = true,
         })
+
+        -- sourcekit-lsp is provided by Xcode / Command Line Tools, not Mason
+        vim.lsp.enable("sourcekit")
 
         local lspkind = require 'lspkind'
         local source_mapping = {
